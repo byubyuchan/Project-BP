@@ -1,0 +1,15 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!221 &22100000
+AnimatorOverrideController:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: Player_EarthQuake AC
+  m_Controller: {fileID: 9100000, guid: c5cecee28436c5d4f89040d547968eb4, type: 2}
+  m_Clips:
+  - m_OriginalClip: {fileID: 3094330708855449807, guid: ab2eeeec69d32d142ac0d781f97a2577, type: 3}
+    m_OverrideClip: {fileID: 3094330708855449807, guid: 48740288977d86d4b8adad7dd6194798, type: 3}
+  - m_OriginalClip: {fileID: 3094330708855449807, guid: 8ab57abc06f7ffd47ae8d91e99f41fa2, type: 3}
+    m_OverrideClip: {fileID: 3094330708855449807, guid: 39e2b573902399d4fbd58117e24ea1d2, type: 3}

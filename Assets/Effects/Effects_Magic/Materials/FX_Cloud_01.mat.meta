@@ -1,0 +1,16 @@
+fileFormatVersion: 2
+guid: 3154786bea44b644f81fa8fef11b7c17
+timeCreated: 1528253999
+licenseType: Store
+NativeFormatImporter:
+  mainObjectFileID: 2100000
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 168372
+  packageName: POLYGON - Particle FX Pack - Art by Synty
+  packageVersion: 1.4.0
+  assetPath: Assets/PolygonParticleFX/Materials/FX_Cloud_01.mat
+  uploadId: 923600

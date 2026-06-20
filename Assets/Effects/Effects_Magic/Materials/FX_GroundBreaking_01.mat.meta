@@ -1,0 +1,16 @@
+fileFormatVersion: 2
+guid: de607c94b5cf04d4c979e64a1e14db3b
+timeCreated: 1576555502
+licenseType: Store
+NativeFormatImporter:
+  mainObjectFileID: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 168372
+  packageName: POLYGON - Particle FX Pack - Art by Synty
+  packageVersion: 1.4.0
+  assetPath: Assets/PolygonParticleFX/Materials/FX_GroundBreaking_01.mat
+  uploadId: 923600

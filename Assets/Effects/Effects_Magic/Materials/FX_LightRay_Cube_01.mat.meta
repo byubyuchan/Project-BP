@@ -1,0 +1,16 @@
+fileFormatVersion: 2
+guid: 3c0ff51e649cf8b43af2c468ce8cb433
+timeCreated: 1588299394
+licenseType: Store
+NativeFormatImporter:
+  mainObjectFileID: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 168372
+  packageName: POLYGON - Particle FX Pack - Art by Synty
+  packageVersion: 1.4.0
+  assetPath: Assets/PolygonParticleFX/Materials/FX_LightRay_Cube_01.mat
+  uploadId: 923600

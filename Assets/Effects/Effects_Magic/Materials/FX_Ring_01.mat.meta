@@ -1,0 +1,16 @@
+fileFormatVersion: 2
+guid: 90b519fd74b3a6a44bf715d99c7cd4af
+timeCreated: 1585193617
+licenseType: Store
+NativeFormatImporter:
+  mainObjectFileID: 2100000
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 168372
+  packageName: POLYGON - Particle FX Pack - Art by Synty
+  packageVersion: 1.4.0
+  assetPath: Assets/PolygonParticleFX/Materials/FX_Ring_01.mat
+  uploadId: 923600
