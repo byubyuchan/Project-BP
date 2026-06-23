@@ -29,6 +29,26 @@ public class TitleController : MonoBehaviour
         if (loginButtonGroup != null) loginButtonGroup.SetActive(false);
         if (popupPanel != null) popupPanel.SetActive(false);
         if (nicknamePanel != null) nicknamePanel.SetActive(false);
+
+        // PlayFab 매니저의 신호를 내 UI 함수들이랑 연결 (구독)
+        if (PlayFabAuthManager.Instance != null)
+        {
+            PlayFabAuthManager.Instance.OnLoginSuccessNewUser += ShowNicknamePanel;
+            PlayFabAuthManager.Instance.OnLoginSuccessExistingUser += LoadNextScene;
+            PlayFabAuthManager.Instance.OnNicknameSetSuccess += LoadNextScene;
+            PlayFabAuthManager.Instance.OnLoginFailedEvent += ShowPopup;
+        }
+    }
+
+    private void OnDestroy()
+    {
+        if (PlayFabAuthManager.Instance != null)
+        {
+            PlayFabAuthManager.Instance.OnLoginSuccessNewUser -= ShowNicknamePanel;
+            PlayFabAuthManager.Instance.OnLoginSuccessExistingUser -= LoadNextScene;
+            PlayFabAuthManager.Instance.OnNicknameSetSuccess -= LoadNextScene;
+            PlayFabAuthManager.Instance.OnLoginFailedEvent -= ShowPopup;
+        }
     }
 
     private void Update()
@@ -36,19 +56,9 @@ public class TitleController : MonoBehaviour
         if (isWaitingForInput)
         {
             bool isAnyButtonPressed = false;
-
-            if (Keyboard.current != null && Keyboard.current.anyKey.wasPressedThisFrame)
-            {
-                isAnyButtonPressed = true;
-            }
-            else if (Mouse.current != null && Mouse.current.leftButton.wasPressedThisFrame)
-            {
-                isAnyButtonPressed = true;
-            }
-            else if (Touchscreen.current != null && Touchscreen.current.primaryTouch.press.wasPressedThisFrame)
-            {
-                isAnyButtonPressed = true;
-            }
+            if (Keyboard.current != null && Keyboard.current.anyKey.wasPressedThisFrame) isAnyButtonPressed = true;
+            else if (Mouse.current != null && Mouse.current.leftButton.wasPressedThisFrame) isAnyButtonPressed = true;
+            else if (Touchscreen.current != null && Touchscreen.current.primaryTouch.press.wasPressedThisFrame) isAnyButtonPressed = true;
 
             if (isAnyButtonPressed)
             {
@@ -75,17 +85,25 @@ public class TitleController : MonoBehaviour
 
     public void OnClosePopupClicked()
     {
-        if (popupPanel != null)
-        {
-            popupPanel.SetActive(false);
-        }
+        if (popupPanel != null) popupPanel.SetActive(false);
     }
 
     public void OnGuestLoginButtonClicked()
     {
-        if (loginButtonGroup != null) loginButtonGroup.SetActive(false);
-        if (nicknamePanel != null) nicknamePanel.SetActive(true);
-        if (nicknameInput != null) nicknameInput.Select();
+        // 1. 플레이팹에 게스트 로그인을 요청한다!
+        if (PlayFabAuthManager.Instance != null)
+        {
+            PlayFabAuthManager.Instance.LoginWithEditor();
+        }
+    }
+
+    // 구글 등 정식 로그인 버튼용 (현재는 게스트와 동일하게 처리하거나 추후 구글 플러그인 연동부)
+    public void OnLoginButtonClicked()
+    {
+        if (PlayFabAuthManager.Instance != null)
+        {
+            PlayFabAuthManager.Instance.LoginWithEditor();
+        }
     }
 
     public void OnNicknameSubmit()
@@ -97,11 +115,21 @@ public class TitleController : MonoBehaviour
             return;
         }
 
-        PhotonNetwork.NickName = nicknameInput.text;
-        SceneManager.LoadScene(nextSceneName);
+        // 플레이팹 DB에 내 이름 변경 요청!
+        if (PlayFabAuthManager.Instance != null)
+        {
+            PlayFabAuthManager.Instance.SetPlayerNickname(nicknameInput.text);
+        }
     }
 
-    public void OnLoginButtonClicked()
+    private void ShowNicknamePanel()
+    {
+        if (loginButtonGroup != null) loginButtonGroup.SetActive(false);
+        if (nicknamePanel != null) nicknamePanel.SetActive(true);
+        if (nicknameInput != null) nicknameInput.Select();
+    }
+
+    private void LoadNextScene()
     {
         SceneManager.LoadScene(nextSceneName);
     }

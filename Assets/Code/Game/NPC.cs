@@ -94,21 +94,7 @@ public class NPC : MonoBehaviourPun
         // 장애물(Obstacle) 혹은 투사체(Projectile) 태그 확인
         if (other.CompareTag("Obstacle") || other.CompareTag("Projectile") || other.CompareTag("NPCProjectile"))
         {
-
-            isExploded = true;
-
-            if (EffectManager.Instance != null)
-            {
-                EffectManager.Instance.RequestExplosion(explosionEffectIndex, transform.position);
-            }
-
-            if (RespawnManager.Instance != null)
-            {
-                int randomIndex = Random.Range(0, respawnPrefabs.Length);
-                string selectedPrefab = respawnPrefabs[randomIndex];
-                RespawnManager.Instance.RespawnNPC("NPC/" + selectedPrefab, transform.position, respawnTime);
-            }
-            Death();
+            photonView.RPC("RPC_KillNPC", RpcTarget.MasterClient);
         }
     }
 
@@ -123,25 +109,44 @@ public class NPC : MonoBehaviourPun
 
         if (other.CompareTag("Projectile") || other.CompareTag("NPCProjectile"))
         {
-            isExploded = true;
-
-            if (EffectManager.Instance != null)
-            {
-                EffectManager.Instance.RequestExplosion(explosionEffectIndex, transform.position);
-            }
-            if (RespawnManager.Instance != null)
-            {
-                int randomIndex = Random.Range(0, respawnPrefabs.Length);
-                string selectedPrefab = respawnPrefabs[randomIndex];
-                RespawnManager.Instance.RespawnNPC("NPC/" + selectedPrefab, transform.position, respawnTime);
-            }
-            Death();
+            photonView.RPC("RPC_KillNPC", RpcTarget.MasterClient);
         }
     }
 
-    void Death()
+    public void Revive()
+    {
+        if (!PhotonNetwork.IsMasterClient) return;
+
+        if (RespawnManager.Instance != null)
+        {
+            int randomIndex = Random.Range(0, respawnPrefabs.Length);
+            string selectedPrefab = respawnPrefabs[randomIndex];
+            RespawnManager.Instance.RespawnNPC("NPC/" + selectedPrefab, transform.position, respawnTime);
+        }
+        Death();
+    }
+
+    public void Hit()
+    {
+        if (EffectManager.Instance != null)
+        {
+            EffectManager.Instance.RequestExplosion(explosionEffectIndex, transform.position);
+        }
+    }
+
+    public void Death()
     {
         PhotonNetwork.Instantiate("NPC/Item", transform.position + new Vector3(0,15f,0), Quaternion.identity);
         PhotonNetwork.Destroy(gameObject);
+    }
+
+    [PunRPC]
+    public void RPC_KillNPC()
+    {
+        if (isExploded) return;
+        isExploded = true;
+
+        Hit();
+        Revive();
     }
 }

@@ -156,6 +156,14 @@ public class Projectile : MonoBehaviourPun
                     }
                 }
             }
+            else if (hit.CompareTag("NPC"))
+            {
+                PhotonView targetPV = hit.gameObject.GetComponent<PhotonView>();
+                if (targetPV != null)
+                {
+                    targetPV.RPC("RPC_KillNPC", RpcTarget.MasterClient);
+                }
+            }
         }
 
         if (photonView.IsMine)

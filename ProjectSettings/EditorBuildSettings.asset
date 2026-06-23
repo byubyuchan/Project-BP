@@ -17,31 +17,31 @@ EditorBuildSettings:
   - enabled: 0
     path: Assets/Clean Multiplayer Pro/Scenes/Environment 2.unity
     guid: 1a9e614b8ddba7b4e8d1c474601930d9
-  - enabled: 0
+  - enabled: 1
     path: Assets/Scenes/SplashScene.unity
     guid: b7b1cae5d62875740af68f9d14735aa7
-  - enabled: 0
+  - enabled: 1
     path: Assets/Scenes/TitleScene.unity
     guid: cbca284cc2b45514e830070a0360ca1d
-  - enabled: 0
+  - enabled: 1
     path: Assets/Scenes/MainMenuScene.unity
     guid: a7fc9caac9865e340974fec9249b31e5
-  - enabled: 0
+  - enabled: 1
     path: Assets/Scenes/CustomLobbyScene.unity
     guid: 291b6b3911ab1c842a313f522bc6b58a
-  - enabled: 0
+  - enabled: 1
     path: Assets/Scenes/WarmupScene.unity
     guid: be884bd25af731845b8731c81eafe4e0
-  - enabled: 0
+  - enabled: 1
     path: Assets/Scenes/RunScene.unity
     guid: 8e4dd3620aad32742b19cdc6541c3935
-  - enabled: 0
+  - enabled: 1
     path: Assets/Scenes/BattleRoyalScene.unity
     guid: d4ebee6de6054794eb3ded33c2190765
   - enabled: 1
     path: Assets/Scenes/DebugScene.unity
     guid: 016b3163cfe9b864badb164a0d4ab4c1
-  - enabled: 0
+  - enabled: 1
     path: Assets/Scenes/TestScene.unity
     guid: d1cc4ce5bd4b29240a62faf21f311e89
   m_configObjects:

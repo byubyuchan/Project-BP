@@ -206,7 +206,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: -1461038600754517701, guid: 1951b3d28f09a5649a4821d43c3a9168, type: 3}
       propertyPath: sceneViewId
-      value: 4
+      value: 15
       objectReference: {fileID: 0}
     - target: {fileID: 1645872946987862, guid: 1951b3d28f09a5649a4821d43c3a9168, type: 3}
       propertyPath: m_Name
@@ -2988,7 +2988,7 @@ MonoBehaviour:
   OwnershipTransfer: 0
   observableSearch: 2
   ObservedComponents: []
-  sceneViewId: 45
+  sceneViewId: 17
   InstantiationId: 0
   isRuntimeInstantiated: 0
 --- !u!114 &637152344
@@ -5044,7 +5044,7 @@ MonoBehaviour:
   OwnershipTransfer: 0
   observableSearch: 2
   ObservedComponents: []
-  sceneViewId: 1
+  sceneViewId: 16
   InstantiationId: 0
   isRuntimeInstantiated: 0
 --- !u!114 &1026778391
@@ -5068,6 +5068,8 @@ MonoBehaviour:
   playerListPanel: {fileID: 1891166245}
   playerSlotPrefab: {fileID: 5923610622262305399, guid: 72aa2abf2b649ab44832b7f856b41581, type: 3}
   nextScene: WarmupScene
+  BGMKey: BGM_Practice
+  AmbKey: Amb_Forest
   checkpoints:
   - {fileID: 1489076426}
   - {fileID: 422436071}
@@ -5102,9 +5104,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::EffectManager
   explosionEffects:
-  - {fileID: 1809022330002312, guid: d2e280a71e9d5b5439554b1f9a64f115, type: 3}
+  - {fileID: 8149814289637279443, guid: 6d34416d706d7204faec4e2475368c0a, type: 3}
   - {fileID: 1158698889827864, guid: 0c7d51ff0c7fc274c9e0949cd39dcb00, type: 3}
   - {fileID: 1277154925287174, guid: 8c356179bd303604cb62cb83019aba8d, type: 3}
+  - {fileID: 1617602193996184, guid: 568ff24ddd9a92449ae285f2b4c77130, type: 3}
+  - {fileID: 1643851402782444, guid: c3a727328d578904298bf0131aa6f2b5, type: 3}
+  - {fileID: 1173262663564242, guid: 5ae0fc182cd4f314388eada53577a25e, type: 3}
+  - {fileID: 1698068915230344, guid: 746252bbe7370e94d8e6ce39abb19917, type: 3}
+  - {fileID: 1869712184636158, guid: e2a39f59c5dd44e4ab0675aa421c53dd, type: 3}
   localScreenEffects:
   - {fileID: 1529229151}
   - {fileID: 1867952087}
@@ -6291,7 +6298,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6717608903751796534, guid: b24204d06ca29e747a0c977fbecbd903, type: 3}
       propertyPath: sceneViewId
-      value: 3
+      value: 14
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

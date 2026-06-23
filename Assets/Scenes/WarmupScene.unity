@@ -9587,6 +9587,8 @@ MonoBehaviour:
   playerListPanel: {fileID: 1593590732}
   playerSlotPrefab: {fileID: 5923610622262305399, guid: 73fddfcf023038848b6f8f5a13e68ad3, type: 3}
   nextScene: TestScene
+  BGMKey: BGM_Practice
+  AmbKey: Amb_Forest
   playerCountText: {fileID: 2046369237}
   hostOptionPanel: {fileID: 923753945}
   targetNameText: {fileID: 1930934841}
@@ -9653,9 +9655,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::EffectManager
   explosionEffects:
-  - {fileID: 1809022330002312, guid: d2e280a71e9d5b5439554b1f9a64f115, type: 3}
+  - {fileID: 8149814289637279443, guid: 6d34416d706d7204faec4e2475368c0a, type: 3}
   - {fileID: 1158698889827864, guid: 0c7d51ff0c7fc274c9e0949cd39dcb00, type: 3}
   - {fileID: 1277154925287174, guid: 8c356179bd303604cb62cb83019aba8d, type: 3}
+  - {fileID: 1617602193996184, guid: 568ff24ddd9a92449ae285f2b4c77130, type: 3}
+  - {fileID: 1643851402782444, guid: c3a727328d578904298bf0131aa6f2b5, type: 3}
+  - {fileID: 1173262663564242, guid: 5ae0fc182cd4f314388eada53577a25e, type: 3}
+  - {fileID: 1698068915230344, guid: 746252bbe7370e94d8e6ce39abb19917, type: 3}
+  - {fileID: 1869712184636158, guid: e2a39f59c5dd44e4ab0675aa421c53dd, type: 3}
   localScreenEffects:
   - {fileID: 157159025}
   - {fileID: 1876835105}
@@ -13757,7 +13764,11 @@ MonoBehaviour:
   playerPrefabs:
   - {fileID: 5254184595196352773, guid: fd081dd7c470c6a4f9ed72287d847cbd, type: 3}
   - {fileID: 5254184595196352773, guid: ec1af0b6cf6462c48967f6b987b23eaa, type: 3}
+  - {fileID: 5254184595196352773, guid: 62a30322e0251cc4cbfcb7e6095a3bca, type: 3}
+  - {fileID: 5254184595196352773, guid: 714c919cf94a9624fa294c288ae25641, type: 3}
+  - {fileID: 5254184595196352773, guid: 9780ee581486cca4386caba5be050856, type: 3}
   - {fileID: 5254184595196352773, guid: 404b2fc3b22f29d458c55f8168a3b615, type: 3}
+  - {fileID: 5254184595196352773, guid: b435723590034cf4a9df0d1eb18e47ee, type: 3}
   canvas: {fileID: 0}
   spawnZones:
   - {fileID: 1765856788}

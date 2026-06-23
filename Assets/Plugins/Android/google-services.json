@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "936513473840",
+    "project_id": "project-bp-6b1be",
+    "storage_bucket": "project-bp-6b1be.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:936513473840:android:9d4d31c74f4bb5c26b8cf5",
+        "android_client_info": {
+          "package_name": "com.EastGunStudio"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAzTFm43yIsIqH0hlzAGMhiNY6ddipECwM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

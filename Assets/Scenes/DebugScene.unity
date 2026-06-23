@@ -4212,7 +4212,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dd9f079e384e69c4f850b0044d8dbc4e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::DebugSceneManager
-  playerPrefabName: Player_sleep
+  playerPrefabName: Player_gigaman
   spawnPoint: {fileID: 1790634272}
   txt: {fileID: 596935686}
   currentPlayer: {fileID: 0}
