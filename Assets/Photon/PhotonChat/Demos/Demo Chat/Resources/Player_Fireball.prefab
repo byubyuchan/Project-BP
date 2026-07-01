@@ -888,7 +888,7 @@ MonoBehaviour:
   effectTransform: {fileID: 6407130005134816350}
   isBlocked: 0
   isNoCC: 0
-  isInvincible: 0
+  isInvincible: 1
   dustSpawnPosition: {fileID: 8292801115745975629}
 --- !u!143 &4816682631914590940
 CharacterController:

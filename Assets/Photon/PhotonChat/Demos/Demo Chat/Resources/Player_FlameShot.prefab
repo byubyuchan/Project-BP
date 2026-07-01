@@ -839,7 +839,7 @@ MonoBehaviour:
   effectTransform: {fileID: 3452826610237347374}
   isBlocked: 0
   isNoCC: 0
-  isInvincible: 0
+  isInvincible: 1
   dustSpawnPosition: {fileID: 7198018852581380931}
 --- !u!54 &8722762316171931392
 Rigidbody:

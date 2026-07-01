@@ -122,9 +122,19 @@ public class RunGameManager : BaseGameManager
                 PhotonNetwork.LocalPlayer.SetCustomProperties(props);
             }
         }
+        else
+        {
+            // 방금 막 통과한 '직전' 체크포인트인지 계산 (0번 인덱스면 마지막 체크포인트가 직전)
+            int previousIndex = expectedIndex - 1;
+            if (previousIndex < 0) previousIndex = checkpoints.Count - 1;
+
+            // 방금 통과한 곳에 살짝 비벼진 게 아니라, 진짜 꼼수를 쓰거나 역주행을 한 거라면?
+            if (cpTransform != checkpoints[previousIndex])
+            {
+                RequestTeleport(playerObj);
+            }
+        }
     }
-
-
     public override void OnPlayerPropertiesUpdate(Player targetPlayer, ExitGames.Client.Photon.Hashtable changedProps)
     {
         // Score(바퀴 수)나 Progress(진행도) 중 하나라도 변경되면 UI 업데이트

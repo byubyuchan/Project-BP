@@ -3806,7 +3806,7 @@ MonoBehaviour:
   effectTransform: {fileID: 5369312226627461276}
   isBlocked: 0
   isNoCC: 0
-  isInvincible: 0
+  isInvincible: 1
   dustSpawnPosition: {fileID: 5332315735787910007}
   ascendSpeed: 50
 --- !u!143 &4816682631914590940
