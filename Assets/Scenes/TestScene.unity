@@ -56969,6 +56969,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1790634272}
   - component: {fileID: 1790634270}
+  - component: {fileID: 1790634273}
   m_Layer: 0
   m_Name: Photon
   m_TagString: Untagged
@@ -56983,7 +56984,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1790634269}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 7ce7856d2b989a64fb28cf8289bcf12a, type: 3}
   m_Name: 
@@ -57017,6 +57018,26 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1790634273
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1790634269}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7ce7856d2b989a64fb28cf8289bcf12a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  playerPrefabs:
+  - {fileID: 5254184595196352773, guid: 714c919cf94a9624fa294c288ae25641, type: 3}
+  canvas: {fileID: 0}
+  spawnZones:
+  - {fileID: 1193735789}
+  ghostCamera: {fileID: 4970134331989797762, guid: 4c37d0e43b311fb4fbaa53ce529369d6, type: 3}
+  effectIndex: 2
+  offset: 15
 --- !u!1001 &1796549752
 PrefabInstance:
   m_ObjectHideFlags: 0
