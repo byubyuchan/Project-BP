@@ -3785,10 +3785,10 @@ MonoBehaviour:
   rotationSpeed: 10
   cameraPivot: {fileID: 9077078744339165630}
   mouseSensitivity: 3
-  upRange: 40
-  downRange: 40
-  zoomUpRange: 50
-  zoomDownRange: 50
+  upRange: 90
+  downRange: 90
+  zoomUpRange: 90
+  zoomDownRange: 90
   verticalRotation: 0
   projectile: Spike
   firePoint: {fileID: 3500724731734377054}

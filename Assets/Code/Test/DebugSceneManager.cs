@@ -1,4 +1,5 @@
 using Photon.Pun;
+using Photon.Pun.UtilityScripts;
 using Photon.Realtime;
 using TMPro;
 using UnityEngine;
@@ -80,6 +81,7 @@ public class DebugSceneManager : MonoBehaviourPunCallbacks
 
         DestroyPlayer();
         currentPlayer = PhotonNetwork.Instantiate(targetPrefab, pos, rot);
+        currentPlayer.GetComponent<MoveByKeys>().isInvincible = false;
     }
 
     public void DestroyPlayer()

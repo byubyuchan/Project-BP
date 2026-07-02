@@ -867,10 +867,10 @@ MonoBehaviour:
   rotationSpeed: 10
   cameraPivot: {fileID: 9077078744339165630}
   mouseSensitivity: 3
-  upRange: 20
-  downRange: 20
-  zoomUpRange: 40
-  zoomDownRange: 40
+  upRange: 90
+  downRange: 90
+  zoomUpRange: 90
+  zoomDownRange: 90
   verticalRotation: 0
   projectile: FireBall
   firePoint: {fileID: 3500724731734377054}
