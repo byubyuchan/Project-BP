@@ -5316,7 +5316,7 @@ MonoBehaviour:
   pageText: {fileID: 2059222804}
   warningPanel: {fileID: 965496922}
   warningText: {fileID: 1395911944}
-  nextSceneName: WarmupScene
+  nextSceneName: TestScene
   systemMenuPanel: {fileID: 2030189311}
   quitButton: {fileID: 1676813984}
   cancelButton: {fileID: 494590213}

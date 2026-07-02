@@ -82,6 +82,7 @@ namespace Photon.Pun.UtilityScripts
 
         public void Awake()
         {
+
             controller = GetComponent<CharacterController>();
             animator = GetComponent<Animator>();
             localSize = transform.localScale;
@@ -124,7 +125,7 @@ namespace Photon.Pun.UtilityScripts
 
                 impact = Vector3.zero;
                 velocity = Vector3.zero;
-                isInvincible = false;
+                isInvincible = true;
 
                 SetLayerRecursively(gameObject, LayerMask.NameToLayer("LocalPlayer"));
                 UpdateCursorState();
@@ -299,7 +300,7 @@ namespace Photon.Pun.UtilityScripts
 
         protected virtual void HandleAttack()
         {
-            if (isChatting() || isUIMode || isMenuOpen || isSleep) return;
+            if (isChatting() || isUIMode || isMenuOpen || isSleep || isInvincible) return;
 
             if (isLoadingAttack && isAttackPressed && !animator.GetCurrentAnimatorStateInfo(1).IsName("Attack"))
             {
