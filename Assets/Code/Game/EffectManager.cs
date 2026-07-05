@@ -48,6 +48,11 @@ public class EffectManager : MonoBehaviourPun
         photonView.RPC("RPC_PlayAttachedEffect", RpcTarget.All, index, targetViewID);
     }
 
+    public void RequestToggleAttachedEffect(int index, int targetViewID, bool isON)
+    {
+        photonView.RPC("RPC_ToggleAttachedEffect", RpcTarget.All, index, targetViewID, isON);
+    }
+
     private IEnumerator ReturnToPoolRoutine(GameObject fx, float delay)
     {
         yield return new WaitForSeconds(delay);
@@ -139,5 +144,50 @@ public class EffectManager : MonoBehaviourPun
 
         StopEffectCoroutine(fx);
         effectCoroutines[fx] = StartCoroutine(ReturnToPoolRoutine(fx, 2.0f));
+    }
+
+    [PunRPC]
+    void RPC_ToggleAttachedEffect(int index, int targetViewID, bool isON)
+    {
+        if (index >= explosionEffects.Length) return;
+
+        PhotonView targetPV = PhotonView.Find(targetViewID);
+        if (targetPV == null) return;
+
+        Transform spineTransform = targetPV.transform;
+        MoveByKeys moveScript = targetPV.GetComponent<MoveByKeys>();
+
+        if (moveScript != null && moveScript.effectTransform != null)
+        {
+            spineTransform = moveScript.effectTransform;
+        }
+
+        string targetEffectName = explosionEffects[index].name;
+
+        if (isON)
+        {
+            foreach (Transform child in spineTransform)
+            {
+                if (child.name.Contains(targetEffectName)) return;
+            }
+
+            GameObject fx = PhotonPoolingManager.instance.Instantiate("VFX/" + targetEffectName, spineTransform.position, spineTransform.rotation);
+            fx.transform.SetParent(spineTransform);
+            fx.SetActive(true);
+        }
+        else
+        {
+            foreach (Transform child in spineTransform)
+            {
+                if (child.name.Contains(targetEffectName))
+                {
+                    GameObject fx = child.gameObject;
+
+                    StopEffectCoroutine(fx);
+                    effectCoroutines[fx] = StartCoroutine(ReturnToPoolRoutine(fx, 0.1f));
+                    break;
+                }
+            }
+        }
     }
 }

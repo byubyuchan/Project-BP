@@ -125,7 +125,6 @@ namespace Photon.Pun.UtilityScripts
 
                 impact = Vector3.zero;
                 velocity = Vector3.zero;
-                isInvincible = true;
 
                 SetLayerRecursively(gameObject, LayerMask.NameToLayer("LocalPlayer"));
                 UpdateCursorState();
@@ -317,7 +316,7 @@ namespace Photon.Pun.UtilityScripts
             if (!photonView.IsMine) return;
 
             if (Camera.main == null) return;
-
+           
             HandleFootstepTimer();
 
             // 1. 상태 체크 (채팅/메뉴/UI모드일 때 입력값 강제 0 처리)

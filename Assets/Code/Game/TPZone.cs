@@ -29,6 +29,11 @@ public class TPZone : MonoBehaviour
         PhotonView pv = other.GetComponent<PhotonView>();
         if (pv == null || !pv.IsMine) return;
 
+        if (RunGameManager.Instance != null)
+        {
+            RunGameManager.Instance.hasPortalTicket = true;
+        }
+
         // FindFirstObjectByType은 싱글톤보다 유연하게 작동합니다.
         BaseGameManager manager = Object.FindFirstObjectByType<BaseGameManager>();
 

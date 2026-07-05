@@ -10,6 +10,9 @@ public class RunGameManager : BaseGameManager
 {
     public static RunGameManager Instance { get; private set; }
 
+    public GameObject[] goalObjects;
+    public GameObject[] invincibleZones;
+
     private void Awake()
     {
         if (Instance == null) Instance = this;
@@ -37,6 +40,22 @@ public class RunGameManager : BaseGameManager
         if (UIManager.Instance != null)
         {
             UIManager.Instance.onEmptyEsc = OpenSystemMenu;
+        }
+
+        if (goalObjects != null && goalObjects.Length > 0)
+        {
+            for (int i = 1; i < goalObjects.Length; i++)
+            {
+                goalObjects[i].SetActive(false);
+            }
+        }
+
+        if (invincibleZones != null && invincibleZones.Length > 0)
+        {
+            for (int i = 1; i < invincibleZones.Length; i++)
+            {
+                invincibleZones[i].SetActive(false);
+            }
         }
     }
 
@@ -115,12 +134,23 @@ public class RunGameManager : BaseGameManager
                 props[PhotonKeys.GOAL] = 0;
 
                 PhotonNetwork.LocalPlayer.SetCustomProperties(props);
-                TeleportPlayerToInitialPos(playerObj, player);
+                // TeleportPlayerToInitialPos(playerObj, player);
+
+                nextGoalIndex = 0;
             }
             else
             {
                 PhotonNetwork.LocalPlayer.SetCustomProperties(props);
             }
+
+            // Fly 캐릭터의 경우, 포탈이 아닌 체크포인트에만 도달하면 퐁당퐁당으로 캐릭터를 유지한 채 완주가 가능함.
+            goalObjects[expectedIndex].SetActive(false);
+            invincibleZones[expectedIndex].SetActive(false);
+
+            goalObjects[nextGoalIndex].SetActive(true);
+            invincibleZones[nextGoalIndex].SetActive(true);
+
+            Debug.Log($"Player {player.NickName} passed checkpoint {expectedIndex}. Next goal: {nextGoalIndex}. Progress: {currentProgress + 1}");
         }
         else
         {

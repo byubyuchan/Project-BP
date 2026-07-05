@@ -15,6 +15,7 @@ TagManager:
   - Canvas
   - Dummy
   - Invincible
+  - Portal
   layers:
   - Default
   - TransparentFX

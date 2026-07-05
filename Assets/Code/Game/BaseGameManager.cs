@@ -60,6 +60,8 @@ public abstract class BaseGameManager : MonoBehaviourPunCallbacks
     [SerializeField] protected string BGMKey = "BGM_Practice";
     [SerializeField] protected string AmbKey = "Amb_Forest";
 
+    public bool hasPortalTicket = false;
+
     protected virtual void InitializePlayerUI()
     {
         if (playerListPanel == null || playerSlotPrefab == null) return;

@@ -3798,7 +3798,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3cf70d0d0d8d1eb4e931f02abb7a0c08, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Photon.Pun.UtilityScripts.MoveByKeys_Fly
-  speed: 100
+  speed: 1000
   jumpHeight: 40
   gravity: 0
   rotationSpeed: 10
@@ -3825,7 +3825,7 @@ MonoBehaviour:
   effectTransform: {fileID: 5369312226627461276}
   isBlocked: 0
   isNoCC: 0
-  isInvincible: 1
+  isInvincible: 0
   dustSpawnPosition: {fileID: 5332315735787910007}
   ascendSpeed: 50
 --- !u!143 &4816682631914590940
@@ -3936,6 +3936,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8b419ffa76e419548a3a74ed1e487ccd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PlayerRaceProgress
+  invincibleEffectIndex: 8
 --- !u!114 &5829303745512418240
 MonoBehaviour:
   m_ObjectHideFlags: 0

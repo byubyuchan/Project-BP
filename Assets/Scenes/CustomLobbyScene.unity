@@ -316,6 +316,122 @@ MonoBehaviour:
   m_ChildScaleWidth: 0
   m_ChildScaleHeight: 0
   m_ReverseArrangement: 0
+--- !u!1 &49682173
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 49682175}
+  - component: {fileID: 49682174}
+  m_Layer: 0
+  m_Name: AudioManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &49682174
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 49682173}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8de98a82b535c9f469233a7c758449b0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::AudioManager
+  audioMixer: {fileID: 0}
+  bgmGroup: {fileID: 0}
+  sfxGroup: {fileID: 0}
+  ambientGroup: {fileID: 0}
+  BGMPairs:
+  - key: BGM_Practice
+    clip: {fileID: 8300000, guid: 5cfc37e89d6ccef4e8fbe688a8fd6b15, type: 3}
+  BGMVolume: 0.5
+  AmbientPairs:
+  - key: Amb_Forest
+    clip: {fileID: 8300000, guid: 46c8aa82cd9faac439e0a5860c1c78c0, type: 3}
+  AmbientVolume: 0.5
+  SFXVolume: 1
+  channels: 64
+  spatialBlend: 1
+  minDistance: 50
+  maxDistance: 400
+  BGMScrollbar: {fileID: 0}
+  SFXScrollbar: {fileID: 0}
+  SFXPairs:
+  - key: Test
+    clip: {fileID: 8300000, guid: 0d414f58299c5c848bec07eed8373e59, type: 3}
+  - key: Sniper1
+    clip: {fileID: 8300000, guid: 76684c04b24ce74488d2e81e9e5a19cd, type: 3}
+  - key: Sniper2
+    clip: {fileID: 8300000, guid: 013b0ec6101bb274aa170eb7b229b925, type: 3}
+  - key: FireBall
+    clip: {fileID: 8300000, guid: 88c4aa3b29bf5f8419c14d1ff463bb2c, type: 3}
+  - key: FireImpact
+    clip: {fileID: 8300000, guid: 6c90c5cccf4eeb54c83078f848e843cc, type: 3}
+  - key: Quake
+    clip: {fileID: 8300000, guid: 4184f9a25c1e6c44fa0833b8aab10e01, type: 3}
+  - key: Hit1
+    clip: {fileID: 8300000, guid: 9df8a0e7e5eb0344b979a1239cfde163, type: 3}
+  - key: Hit2
+    clip: {fileID: 8300000, guid: 248017a573d2466469062d4c971c8548, type: 3}
+  - key: IceBlast
+    clip: {fileID: 8300000, guid: 069c04b8c8aea464e95a77925178cb10, type: 3}
+  - key: FlameShot
+    clip: {fileID: 8300000, guid: 3cee15a746d55534284ab337abab80f8, type: 3}
+  - key: Landing1
+    clip: {fileID: 8300000, guid: 3e10d68c7f7aa854694549c916e8ba46, type: 3}
+  - key: Landing2
+    clip: {fileID: 8300000, guid: baf90d315c62c1648ba2901ff92db065, type: 3}
+  - key: Landing3
+    clip: {fileID: 8300000, guid: 70bfbaaebebfb0d4ba87a5e9947d5ad3, type: 3}
+  - key: Run1
+    clip: {fileID: 8300000, guid: db5599d6457a65c498e76dea11dc4711, type: 3}
+  - key: Run2
+    clip: {fileID: 8300000, guid: ecb856cc785d38a4da1128d372b7d6e7, type: 3}
+  - key: Run3
+    clip: {fileID: 8300000, guid: 240bc51f540a10342988d9d7e924d814, type: 3}
+  - key: Jump1
+    clip: {fileID: 8300000, guid: 80d4ea7778bc3d9459d9fcea672afcee, type: 3}
+  - key: Jump2
+    clip: {fileID: 8300000, guid: 314755392aa072e4eb6fc3b02b791b72, type: 3}
+  - key: Jump3
+    clip: {fileID: 8300000, guid: f7d6941d3b847874686c2b6a80ab8a1b, type: 3}
+  - key: AirStep
+    clip: {fileID: 8300000, guid: 5311a285e213e2d469f0949de3db774d, type: 3}
+  - key: Crystal
+    clip: {fileID: 8300000, guid: 88148ef4aea96cc4aa78a60431cf1dea, type: 3}
+  - key: Prism
+    clip: {fileID: 8300000, guid: 4310474905e266640852f43bd609a1a4, type: 3}
+  - key: Electro
+    clip: {fileID: 8300000, guid: cd3a01ff95509194d91ea0b5a0748f35, type: 3}
+  - key: Impact
+    clip: {fileID: 8300000, guid: 77db0e4acb763ab4db4f9bf20eadc224, type: 3}
+  - key: GetItem
+    clip: {fileID: 8300000, guid: 80eb60718f65ed346918d4e2fb351712, type: 3}
+  - key: UseItem
+    clip: {fileID: 8300000, guid: 81346588542ed8943bae889981fca605, type: 3}
+--- !u!4 &49682175
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 49682173}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 153.98596, y: 418.30914, z: -2116.7983}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &63705652
 GameObject:
   m_ObjectHideFlags: 0
@@ -15683,3 +15799,4 @@ SceneRoots:
   - {fileID: 536339520}
   - {fileID: 635496025}
   - {fileID: 971912857}
+  - {fileID: 49682175}
