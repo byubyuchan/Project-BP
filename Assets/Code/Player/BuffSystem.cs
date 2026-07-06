@@ -37,7 +37,7 @@ public class BuffSystem : MonoBehaviourPun
             if (hpController != null && !hpController.isDead)
             {
                 // 데미지 틱 발생
-                photonView.RPC("RPC_TakeDamage", photonView.Owner, damagePerTick);
+                photonView.RPC("RPC_TakeDamage", photonView.Owner, damagePerTick, -1);
             }
             else break; // 사망 시 즉시 종료
         }

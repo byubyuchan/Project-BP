@@ -28,6 +28,7 @@ public class Projectile : MonoBehaviourPun
 
     [SerializeField] public string soundKey = "Sniper";
 
+
     protected virtual void OnEnable()
     {
         int randomIndex = Random.Range(1, 4);
@@ -117,7 +118,7 @@ public class Projectile : MonoBehaviourPun
                     }
 
 
-                    targetPV.RPC("RPC_TakeDamage", targetPV.Owner, damage);
+                    targetPV.RPC("RPC_TakeDamage", targetPV.Owner, damage, photonView.OwnerActorNr);
                 }
                 ApplyKnockback(col.gameObject, targetPV);
             }
@@ -152,7 +153,7 @@ public class Projectile : MonoBehaviourPun
 
                     if (damage > 0f)
                     {
-                        targetPV.RPC("RPC_TakeDamage", targetPV.Owner, damage);
+                        targetPV.RPC("RPC_TakeDamage", targetPV.Owner, damage, photonView.OwnerActorNr);
                     }
                 }
             }

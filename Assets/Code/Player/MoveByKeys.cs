@@ -80,6 +80,8 @@ namespace Photon.Pun.UtilityScripts
         private float footstepTimer = 0f;
         [SerializeField] private Transform dustSpawnPosition;
 
+        private int lastAttackerId = -1;
+
         public void Awake()
         {
 
@@ -502,21 +504,40 @@ namespace Photon.Pun.UtilityScripts
         }
 
         [PunRPC]
-        public void RPC_TakeDamage(float damage) 
+        // 데미지 함수에 attackerId(타격자 번호) 매개변수 추가!
+        public void RPC_TakeDamage(float damage, int attackerId)
         {
             if (isInvincible) return;
 
             if (photonView.IsMine && damage > 0f)
             {
                 HPController hpController = GetComponent<HPController>();
-                if (hpController != null && hpController.Hp >= 0f)
+                if (hpController != null && hpController.Hp >= 0f) // 여기 > 0f 로 방어 처리 권장
                 {
                     hpController.Hp -= damage;
+
+                    // 틱딜이나 낙사(-1)가 아니라면, 마지막 타격자를 수첩에 갱신!
+                    if (attackerId != -1)
+                    {
+                        lastAttackerId = attackerId;
+                    }
 
                     EffectManager.Instance.RequestExplosion(2, effectTransform.position);
                     if (!hpController.isDead && hpController.Hp <= 0f)
                     {
                         hpController.Die();
+
+                        // 내가 죽었을 때 킬러가 존재하고, 그게 나 자신(자살)이 아니라면 점수 지급!
+                        if (lastAttackerId != -1 && lastAttackerId != photonView.OwnerActorNr)
+                        {
+                            if (RunGameManager.Instance != null)
+                            {
+                                RunGameManager.Instance.AddKillScore(lastAttackerId);
+                            }
+                        }
+
+                        // 죽고 나면 수첩 초기화 (연속 킬 방지)
+                        lastAttackerId = -1;
                     }
                 }
             }

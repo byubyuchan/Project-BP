@@ -1066,7 +1066,7 @@ MonoBehaviour:
   Hp: 200
   maxHp: 0
   UIprefab: {fileID: 170056, guid: 525d0c2c9acd74d4faf569562686959b, type: 3}
-  respawnDelay: 10
+  respawnDelay: 3
   isDead: 0
 --- !u!114 &9197531315797362294
 MonoBehaviour:

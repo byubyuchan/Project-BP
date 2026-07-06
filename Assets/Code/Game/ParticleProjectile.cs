@@ -1,6 +1,7 @@
 using Photon.Pun;
 using Photon.Pun.UtilityScripts;
 using System.Collections.Generic;
+using System.Runtime;
 using UnityEngine;
 
 public class ParticleProjectile : Projectile
@@ -103,7 +104,7 @@ public class ParticleProjectile : Projectile
 
                 if (damage > 0f)
                 {
-                    targetPV.RPC("RPC_TakeDamage", targetPV.Owner, damage);
+                    targetPV.RPC("RPC_TakeDamage", targetPV.Owner, damage, photonView.OwnerActorNr);
                 }
                 ApplyEffect(other);
                 ApplyKnockback(other, targetPV);

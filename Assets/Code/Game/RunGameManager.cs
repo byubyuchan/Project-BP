@@ -11,7 +11,7 @@ public class RunGameManager : BaseGameManager
     public static RunGameManager Instance { get; private set; }
 
     public GameObject[] goalObjects;
-    public GameObject[] invincibleZones;
+    public GameObject[] checkZones;
 
     private void Awake()
     {
@@ -50,11 +50,11 @@ public class RunGameManager : BaseGameManager
             }
         }
 
-        if (invincibleZones != null && invincibleZones.Length > 0)
+        if (checkZones != null && checkZones.Length > 0)
         {
-            for (int i = 1; i < invincibleZones.Length; i++)
+            for (int i = 1; i < checkZones.Length; i++)
             {
-                invincibleZones[i].SetActive(false);
+                checkZones[i].SetActive(false);
             }
         }
     }
@@ -64,8 +64,16 @@ public class RunGameManager : BaseGameManager
         // 1. 점수(바퀴 수)를 1순위로 내림차순 정렬
         // 2. 진행도(Distance)를 2순위로 내림차순 정렬 (골인 지점에 가까울수록 수치가 크다고 가정)
         // 만약 '결승선까지 남은 거리'라면 값이 작을수록 앞서있는 것이므로 ThenBy(오름차순)를 사용
+
+        //var sortedPlayers = PhotonNetwork.PlayerList
+        //    .OrderByDescending(p => p.CustomProperties.ContainsKey(PhotonKeys.LAP) ? (int)p.CustomProperties[PhotonKeys.LAP] : 0)
+        //    .ThenByDescending(p => p.CustomProperties.ContainsKey(PhotonKeys.PROGRESS) ? (int)p.CustomProperties[PhotonKeys.PROGRESS] : 0)
+        //    .ToList();
+
         var sortedPlayers = PhotonNetwork.PlayerList
-            .OrderByDescending(p => p.CustomProperties.ContainsKey(PhotonKeys.LAP) ? (int)p.CustomProperties[PhotonKeys.LAP] : 0)
+            // 1순위: 이제 바퀴 수가 아니라 점수(Score)가 제일 높은 사람이 1등!
+            .OrderByDescending(p => p.CustomProperties.ContainsKey("Score") ? (int)p.CustomProperties["Score"] : 0)
+            // 2순위: 점수가 같다면 현재 진행도(거리)가 앞선 사람이 이김!
             .ThenByDescending(p => p.CustomProperties.ContainsKey(PhotonKeys.PROGRESS) ? (int)p.CustomProperties[PhotonKeys.PROGRESS] : 0)
             .ToList();
 
@@ -80,8 +88,8 @@ public class RunGameManager : BaseGameManager
                 RunPlayerSlot slot = activePlayerSlots[actorNr] as RunPlayerSlot;
                 if (slot != null)
                 {
-                    int lap = sortedPlayers[i].CustomProperties.ContainsKey(PhotonKeys.LAP) ? (int)sortedPlayers[i].CustomProperties[PhotonKeys.LAP] : 0;
-                    slot.UpdateScore(lap);
+                    int score = sortedPlayers[i].CustomProperties.ContainsKey("Score") ? (int)sortedPlayers[i].CustomProperties["Score"] : 0;
+                    slot.UpdateScore(score);
                     slot.UpdateRank(i + 1);
                 }
             }
@@ -127,14 +135,29 @@ public class RunGameManager : BaseGameManager
             props.Add(PhotonKeys.LAST_ROT_Y, cpTransform.eulerAngles.y);
 
             // 랩 완주 판정
+            //if (nextGoalIndex >= checkpoints.Count)
+            //{
+            //    int currentLap = player.CustomProperties.ContainsKey(PhotonKeys.LAP) ? (int)player.CustomProperties[PhotonKeys.LAP] : 0;
+            //    props[PhotonKeys.LAP] = currentLap + 1;
+            //    props[PhotonKeys.GOAL] = 0;
+
+            //    PhotonNetwork.LocalPlayer.SetCustomProperties(props);
+            //    // TeleportPlayerToInitialPos(playerObj, player);
+
+            //    nextGoalIndex = 0;
+            //}
+
             if (nextGoalIndex >= checkpoints.Count)
             {
                 int currentLap = player.CustomProperties.ContainsKey(PhotonKeys.LAP) ? (int)player.CustomProperties[PhotonKeys.LAP] : 0;
+                int currentScore = player.CustomProperties.ContainsKey("Score") ? (int)player.CustomProperties["Score"] : 0;
+
                 props[PhotonKeys.LAP] = currentLap + 1;
                 props[PhotonKeys.GOAL] = 0;
 
+                props["Score"] = currentScore + 100;
+
                 PhotonNetwork.LocalPlayer.SetCustomProperties(props);
-                // TeleportPlayerToInitialPos(playerObj, player);
 
                 nextGoalIndex = 0;
             }
@@ -144,11 +167,8 @@ public class RunGameManager : BaseGameManager
             }
 
             // Fly 캐릭터의 경우, 포탈이 아닌 체크포인트에만 도달하면 퐁당퐁당으로 캐릭터를 유지한 채 완주가 가능함.
-            goalObjects[expectedIndex].SetActive(false);
-            invincibleZones[expectedIndex].SetActive(false);
-
-            goalObjects[nextGoalIndex].SetActive(true);
-            invincibleZones[nextGoalIndex].SetActive(true);
+            if (expectedIndex < goalObjects.Length) goalObjects[expectedIndex].SetActive(false);
+            if (expectedIndex < checkZones.Length) checkZones[expectedIndex].SetActive(false);
 
             Debug.Log($"Player {player.NickName} passed checkpoint {expectedIndex}. Next goal: {nextGoalIndex}. Progress: {currentProgress + 1}");
         }
@@ -165,19 +185,41 @@ public class RunGameManager : BaseGameManager
             }
         }
     }
+    public void ActivateMyNextCheckpoint()
+    {
+        int expectedIndex = PhotonNetwork.LocalPlayer.CustomProperties.ContainsKey(PhotonKeys.GOAL)
+                            ? (int)PhotonNetwork.LocalPlayer.CustomProperties[PhotonKeys.GOAL] : 0;
+
+        if (expectedIndex + 1 < goalObjects.Length) expectedIndex++;
+        else expectedIndex = 0;
+
+        // 1. 다음 Goal Object 켜기 안전띠
+        if (goalObjects != null && expectedIndex < goalObjects.Length && goalObjects[expectedIndex] != null)
+        {
+            goalObjects[expectedIndex].SetActive(true);
+        }
+
+        // 2. 다음 Invincible Zone 켜기 안전띠
+        if (checkZones != null && expectedIndex < checkZones.Length && checkZones[expectedIndex] != null)
+        {
+            checkZones[expectedIndex].SetActive(true);
+        }
+
+        Debug.Log("활성화 인덱스 : " + expectedIndex);
+    }
+
     public override void OnPlayerPropertiesUpdate(Player targetPlayer, ExitGames.Client.Photon.Hashtable changedProps)
     {
-        // Score(바퀴 수)나 Progress(진행도) 중 하나라도 변경되면 UI 업데이트
-        if (changedProps.ContainsKey(PhotonKeys.LAP) || changedProps.ContainsKey(PhotonKeys.PROGRESS))
+        if (changedProps.ContainsKey("Score") || changedProps.ContainsKey(PhotonKeys.PROGRESS))
         {
             SortPlayerUI();
         }
 
-        if (changedProps.ContainsKey(PhotonKeys.LAP))
+        // 이제 LAP 검사가 아니라 Score 검사로 우승자를 가림!
+        if (changedProps.ContainsKey("Score"))
         {
-            int currentLap = (int)changedProps[PhotonKeys.LAP];
-
-            if (currentLap >= maxLap)
+            int currentScore = (int)changedProps["Score"];
+            if (currentScore >= 300)
             {
                 OnPlayerFinished();
             }
@@ -198,5 +240,20 @@ public class RunGameManager : BaseGameManager
         if (currentState == GameState.Finish) return;
 
         FinishGame();
+    }
+
+
+    public void AddKillScore(int killerActorNr)
+    {
+        Player killer = PhotonNetwork.CurrentRoom.GetPlayer(killerActorNr);
+        if (killer != null)
+        {
+            int currentScore = killer.CustomProperties.ContainsKey("Score") ? (int)killer.CustomProperties["Score"] : 0;
+            ExitGames.Client.Photon.Hashtable props = new ExitGames.Client.Photon.Hashtable();
+            props["Score"] = currentScore + 1;
+            killer.SetCustomProperties(props);
+
+            Debug.Log($"<color=red>[킬 로그] {killer.NickName}님이 1킬 달성! 현재 점수: {currentScore + 1}</color>");
+        }
     }
 }

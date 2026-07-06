@@ -33,34 +33,12 @@ public class PlayerRaceProgress : MonoBehaviourPun
     {
         if (!photonView.IsMine) return;
 
-        if (other.CompareTag("Portal"))
-        {
-            RunGameManager.Instance.hasPortalTicket = true;
-        }
-
-        // Check if the trigger is a checkpoint
         if (other.CompareTag("Checkpoint"))
         {
-            if (RunGameManager.Instance == null) return;
-
-            int hitIndex = RunGameManager.Instance.checkpoints.IndexOf(other.transform);
-
-            int expectedIndex = PhotonNetwork.LocalPlayer.CustomProperties.ContainsKey(PhotonKeys.GOAL)
-                                ? (int)PhotonNetwork.LocalPlayer.CustomProperties[PhotonKeys.GOAL] : 0;
-
-            if (hitIndex == expectedIndex)
+            if (RunGameManager.Instance != null)
             {
-                if (!RunGameManager.Instance.hasPortalTicket)
-                {
-                    RunGameManager.Instance.RequestTeleport(this.gameObject);
-                    return;
-                }
-
-                // 정상 통과면 티켓 소모
-                RunGameManager.Instance.hasPortalTicket = false;
+                RunGameManager.Instance.ProcessLocalPlayerCheckpointTrigger(this.gameObject, other.transform);
             }
-
-            RunGameManager.Instance.ProcessLocalPlayerCheckpointTrigger(this.gameObject, other.transform);
         }
 
         if (other.CompareTag("Invincible"))

@@ -1049,11 +1049,6 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 4903835601634138, guid: 0ee901a07d13a814d9e66dbef2b86c67, type: 3}
   m_PrefabInstance: {fileID: 128578818}
   m_PrefabAsset: {fileID: 0}
---- !u!1 &128578820 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 1059589180422490, guid: 0ee901a07d13a814d9e66dbef2b86c67, type: 3}
-  m_PrefabInstance: {fileID: 128578818}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1 &186933461
 GameObject:
   m_ObjectHideFlags: 0
@@ -11412,11 +11407,6 @@ PrefabInstance:
 --- !u!4 &365978216 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 4903835601634138, guid: 0ee901a07d13a814d9e66dbef2b86c67, type: 3}
-  m_PrefabInstance: {fileID: 365978215}
-  m_PrefabAsset: {fileID: 0}
---- !u!1 &365978217 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 1059589180422490, guid: 0ee901a07d13a814d9e66dbef2b86c67, type: 3}
   m_PrefabInstance: {fileID: 365978215}
   m_PrefabAsset: {fileID: 0}
 --- !u!1001 &375988248
@@ -28197,11 +28187,11 @@ MonoBehaviour:
   - {fileID: 341576328}
   - {fileID: 1575253419}
   - {fileID: 950166525}
-  invincibleZones:
-  - {fileID: 1473601460}
-  - {fileID: 365978217}
-  - {fileID: 128578820}
-  - {fileID: 2059674481}
+  checkZones:
+  - {fileID: 1193735788}
+  - {fileID: 1489076425}
+  - {fileID: 422436070}
+  - {fileID: 684568760}
   checkpoints:
   - {fileID: 1489076426}
   - {fileID: 422436071}
@@ -34346,11 +34336,6 @@ PrefabInstance:
 --- !u!4 &1473601459 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 4903835601634138, guid: 0ee901a07d13a814d9e66dbef2b86c67, type: 3}
-  m_PrefabInstance: {fileID: 1473601458}
-  m_PrefabAsset: {fileID: 0}
---- !u!1 &1473601460 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 1059589180422490, guid: 0ee901a07d13a814d9e66dbef2b86c67, type: 3}
   m_PrefabInstance: {fileID: 1473601458}
   m_PrefabAsset: {fileID: 0}
 --- !u!1001 &1475658855
@@ -70415,11 +70400,6 @@ PrefabInstance:
 --- !u!4 &2059674480 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 4903835601634138, guid: 0ee901a07d13a814d9e66dbef2b86c67, type: 3}
-  m_PrefabInstance: {fileID: 2059674479}
-  m_PrefabAsset: {fileID: 0}
---- !u!1 &2059674481 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 1059589180422490, guid: 0ee901a07d13a814d9e66dbef2b86c67, type: 3}
   m_PrefabInstance: {fileID: 2059674479}
   m_PrefabAsset: {fileID: 0}
 --- !u!1001 &2077048980
