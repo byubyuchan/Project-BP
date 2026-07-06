@@ -101,7 +101,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Unity.RenderPipelines.Core.Runtime::UnityEngine.Rendering.FreeCamera
   m_LookSpeedController: 180
   m_LookSpeedMouse: 60
-  m_MoveSpeed: 25
+  m_MoveSpeed: 100
   m_MoveSpeedIncrement: 2.5
   m_Turbo: 2
 --- !u!81 &3451428309406519882

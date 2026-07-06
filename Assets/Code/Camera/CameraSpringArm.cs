@@ -5,7 +5,10 @@ public class CameraSpringArm : MonoBehaviour
     [Header("카메라 세팅")]
     public Transform mainCamera;
     public float defaultDistance = 12.2f;
-    public float minDistance = 3f;
+
+    // 카메라의 방어막 크기 (이걸 키울수록 벽/바닥에서 멀리 떨어져서 멈춤)
+    [SerializeField]
+    public float collisionRadius = 4f;
 
     [Header("충돌 세팅")]
     public LayerMask obstacleLayer;
@@ -15,25 +18,21 @@ public class CameraSpringArm : MonoBehaviour
         float currentX = mainCamera.localPosition.x;
         float currentY = mainCamera.localPosition.y;
 
-        Vector3 desiredLocalPos = new Vector3(currentX, currentY, -defaultDistance);
-        Vector3 desiredWorldPos = transform.TransformPoint(desiredLocalPos);
-
-        Vector3 direction = (desiredWorldPos - transform.position).normalized;
-        float maxDistance = desiredLocalPos.magnitude;
-
+        Vector3 rayOrigin = transform.TransformPoint(new Vector3(currentX, currentY, 0f));
         RaycastHit hit;
 
-        if (Physics.SphereCast(transform.position, 0.2f, direction, out hit, maxDistance, obstacleLayer))
+        float padding = 0.1f; // 방어막이 커졌으니 패딩은 살짝만!
+
+        // 0.25f 대신 방어막 크기(collisionRadius) 변수 사용!
+        if (Physics.SphereCast(rayOrigin, collisionRadius, -transform.forward, out hit, defaultDistance, obstacleLayer))
         {
-            float hitRatio = hit.distance / maxDistance;
-
-            float safeZ = Mathf.Clamp(-defaultDistance * hitRatio, -defaultDistance, -minDistance);
-
+            float safeZ = -(hit.distance - padding);
+            safeZ = Mathf.Clamp(safeZ, -defaultDistance, -0.5f);
             mainCamera.localPosition = new Vector3(currentX, currentY, safeZ);
         }
         else
         {
-            mainCamera.localPosition = desiredLocalPos;
+            mainCamera.localPosition = new Vector3(currentX, currentY, -defaultDistance);
         }
     }
 }

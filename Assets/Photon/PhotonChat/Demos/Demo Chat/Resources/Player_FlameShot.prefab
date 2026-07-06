@@ -310,10 +310,15 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::PlayerCameraZoom
   playerMovement: {fileID: 980936366039599921}
   cameraTransform: {fileID: 8338398599734270721}
-  zoomXOffset: 3.6
+  zoomXOffset: 7.2
   zoomYOffset: 3.6
-  zoomFOV: 40
+  zoomFOV: 70
   zoomSpeed: 5
+  scrollSensitivity: 1000
+  minDefaultFOV: 40
+  maxDefaultFOV: 110
+  minAimFOV: 15
+  maxAimFOV: 90
   crosshairImage: {fileID: 0}
   rigAimTarget: {fileID: 6268352527473388946}
 --- !u!1 &3374823730875295551
@@ -616,7 +621,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::CameraSpringArm
   mainCamera: {fileID: 8338398599734270721}
   defaultDistance: 12.2
-  minDistance: 3
+  collisionRadius: 4
   obstacleLayer:
     serializedVersion: 2
     m_Bits: 2039
@@ -937,7 +942,7 @@ CharacterController:
   m_StepOffset: 0.3
   m_SkinWidth: 0.08
   m_MinMoveDistance: 0
-  m_Center: {x: -0.4, y: 1.9, z: -0.1}
+  m_Center: {x: -0.4, y: 1.88, z: -0.1}
 --- !u!114 &4505607586069167487
 MonoBehaviour:
   m_ObjectHideFlags: 0

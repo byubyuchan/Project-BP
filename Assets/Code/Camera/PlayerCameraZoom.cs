@@ -1,6 +1,7 @@
 using Photon.Pun;
 using Photon.Pun.UtilityScripts;
 using UnityEngine;
+using UnityEngine.InputSystem; // 마우스 휠 입력을 위해 New Input System 추가
 using static UnityEngine.Rendering.DebugManager;
 
 // 플레이어가 공격 준비 (Aim) 상태일 때 카메라를 줌인하는 스크립트
@@ -11,10 +12,18 @@ public class PlayerCameraZoom : MonoBehaviourPun, IPunObservable
 
     [Header("Camera Zoom Settings")]
     public Transform cameraTransform;
-    public float zoomXOffset = 3.6f;
+    public float zoomXOffset = 7.2f;
     public float zoomYOffset = 3.6f;
     public float zoomFOV = 40f;
     public float zoomSpeed = 5f;
+
+    // 모바일은 버튼으로 할당하여 줌 기능 구현
+    [Header("Scroll Zoom Settings (New)")]
+    public float scrollSensitivity = 1000f; // 마우스 휠 민감도 (New Input System은 값이 커서 작게 설정)
+    public float minDefaultFOV = 40f;       // 평상시 최대 줌인 FOV
+    public float maxDefaultFOV = 110f;       // 평상시 최대 줌아웃 FOV
+    public float minAimFOV = 5f;           // 조준 시 최대 줌인 FOV (스나이퍼 느낌)
+    public float maxAimFOV = 90f;           // 조준 시 최대 줌아웃 FOV
 
     public GameObject crosshairImage;
 
@@ -31,11 +40,9 @@ public class PlayerCameraZoom : MonoBehaviourPun, IPunObservable
 
     void Awake()
     {
-        // Awake에서는 내 몸에 붙은 컴포넌트나 static 참조만 세팅하는 것이 안전합니다.
         if (playerMovement == null) playerMovement = GetComponent<MoveByKeys>();
     }
 
-    // 플레이어가 풀링을 통해 재사용되기 때문에 Awake 이후 OnEnable에서 확실하게 청소
     void OnEnable()
     {
         if (!photonView.IsMine) return;
@@ -56,7 +63,6 @@ public class PlayerCameraZoom : MonoBehaviourPun, IPunObservable
         {
             camComponent = GetComponentInChildren<Camera>(true);
             cameraTransform = camComponent.transform;
-
 
             if (!isDefaultValuesSet)
             {
@@ -102,7 +108,31 @@ public class PlayerCameraZoom : MonoBehaviourPun, IPunObservable
     {
         if (!photonView.IsMine || playerMovement == null || cameraTransform == null || camComponent == null || crosshairImage == null) return;
 
+        // 상태창이나 채팅창 열려있으면 휠 줌 안 먹히게 방어
+        if (playerMovement.isMenuOpen || playerMovement.isUIMode) return;
+
         isAiming = playerMovement.isLoadingAttack;
+
+        // 마우스 휠 스크롤 값 읽기 (New Input System)
+        if (Mouse.current != null)
+        {
+            float scroll = Mouse.current.scroll.ReadValue().y;
+            if (Mathf.Abs(scroll) > 0.01f)
+            {
+                if (isAiming)
+                {
+                    // 조준 중일 때는 조준 FOV 조절
+                    zoomFOV -= scroll * scrollSensitivity * 100f;
+                    zoomFOV = Mathf.Clamp(zoomFOV, minAimFOV, maxAimFOV);
+                }
+                else
+                {
+                    // 평상시일 때는 기본 FOV 조절
+                    defaultFOV -= scroll * scrollSensitivity * 100f;
+                    defaultFOV = Mathf.Clamp(defaultFOV, minDefaultFOV, maxDefaultFOV);
+                }
+            }
+        }
 
         float targetX = isAiming ? zoomXOffset : defaultXOffset;
         float targetFOV = isAiming ? zoomFOV : defaultFOV;
@@ -111,7 +141,7 @@ public class PlayerCameraZoom : MonoBehaviourPun, IPunObservable
             Mathf.Abs(cameraTransform.localPosition.x - targetX) < 0.001f &&
             Mathf.Abs(camComponent.fieldOfView - targetFOV) < 0.01f)
         {
-            return; 
+            return;
         }
 
         HandleZoom(isAiming);
@@ -133,7 +163,6 @@ public class PlayerCameraZoom : MonoBehaviourPun, IPunObservable
         float targetY = isAiming ? zoomYOffset : defaultYOffset;
         float targetFOV = isAiming ? zoomFOV : defaultFOV;
 
-        // 현재 조준선 활성화 상태와 타겟 상태가 다를 때만 갱신 (매 프레임 SetActive 호출 방지 성능 최적화)
         if (crosshairImage.activeSelf != isAiming)
         {
             crosshairImage.SetActive(isAiming);
@@ -145,10 +174,10 @@ public class PlayerCameraZoom : MonoBehaviourPun, IPunObservable
         localPos.y = Mathf.Lerp(localPos.y, targetY, Time.deltaTime * zoomSpeed);
         cameraTransform.localPosition = localPos;
 
+        // 휠로 바뀐 타겟 FOV를 향해 카메라가 부드럽게 변함!
         camComponent.fieldOfView = Mathf.Lerp(camComponent.fieldOfView, targetFOV, Time.deltaTime * zoomSpeed);
     }
 
-    // 조준선을 안전하게 찾아서 꺼주는 서브 루틴
     private void ResetCrosshair()
     {
         if (crosshairImage == null)
@@ -179,6 +208,4 @@ public class PlayerCameraZoom : MonoBehaviourPun, IPunObservable
             }
         }
     }
-
-
 }
