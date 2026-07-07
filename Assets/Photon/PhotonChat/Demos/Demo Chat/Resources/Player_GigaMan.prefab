@@ -5784,7 +5784,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 99b4daedc5e674a429acdf1e77da6a55, type: 3}
   m_Name: 
   m_EditorClassIdentifier: PhotonUnityNetworking.Utilities::Photon.Pun.UtilityScripts.MoveByKeys
-  speed: 450
+  speed: 40
   jumpHeight: 25
   gravity: -200
   rotationSpeed: 10

@@ -27,6 +27,10 @@ public class RunGameManager : BaseGameManager
     {
         base.Start();
 
+        // 본 게임 씬에 도착했으니 셔터 올리고 통신 재개!
+        PhotonNetwork.IsMessageQueueRunning = true;
+
+        maxPlayers = PhotonNetwork.CurrentRoom != null ? PhotonNetwork.CurrentRoom.MaxPlayers : 8;
         maxPlayers = PhotonNetwork.CurrentRoom != null ? PhotonNetwork.CurrentRoom.MaxPlayers : 8;
         if (maxPlayers == 0) maxPlayers = 8;
 

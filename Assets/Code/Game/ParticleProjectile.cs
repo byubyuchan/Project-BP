@@ -104,7 +104,7 @@ public class ParticleProjectile : Projectile
 
                 if (damage > 0f)
                 {
-                    targetPV.RPC("RPC_TakeDamage", targetPV.Owner, damage, photonView.OwnerActorNr);
+                    targetPV.RPC("RPC_TakeDamage", targetPV.Owner, damage, activePV.OwnerActorNr);
                 }
                 ApplyEffect(other);
                 ApplyKnockback(other, targetPV);

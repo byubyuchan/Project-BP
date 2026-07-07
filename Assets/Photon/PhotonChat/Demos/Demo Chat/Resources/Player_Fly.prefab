@@ -3803,7 +3803,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3cf70d0d0d8d1eb4e931f02abb7a0c08, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Photon.Pun.UtilityScripts.MoveByKeys_Fly
-  speed: 1000
+  speed: 125
   jumpHeight: 40
   gravity: 0
   rotationSpeed: 10

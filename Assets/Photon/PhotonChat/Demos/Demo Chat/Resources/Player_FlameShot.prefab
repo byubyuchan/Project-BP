@@ -836,7 +836,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d9c19a800d5ecfe47895c4b230ea476b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Photon.Pun.UtilityScripts.MoveByKeys_FlameShot
-  speed: 700
+  speed: 90
   jumpHeight: 25
   gravity: -200
   rotationSpeed: 10

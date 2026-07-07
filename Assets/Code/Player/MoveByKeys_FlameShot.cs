@@ -96,11 +96,30 @@ namespace Photon.Pun.UtilityScripts
         [PunRPC]
         public void RPC_InitFlame(int viewID)
         {
-            PhotonView targetPV = PhotonView.Find(viewID);
+
+            StartCoroutine(WaitAndInitFlameRoutine(viewID));
+        }
+
+        private IEnumerator WaitAndInitFlameRoutine(int viewID)
+        {
+            PhotonView targetPV = null;
+            float timeout = 2f; // 최대 2초 대기 (무한루프 방지)
+
+            while (targetPV == null && timeout > 0)
+            {
+                targetPV = PhotonView.Find(viewID);
+                timeout -= Time.deltaTime;
+                yield return null; // 한 프레임씩 대기하며 객체가 생성됐는지 체크
+            }
+
             if (targetPV != null)
             {
                 networkFlameObj = targetPV.gameObject;
                 flames = networkFlameObj.GetComponentsInChildren<ParticleSystem>();
+
+                // 화염 객체를 firePoint의 자식으로 등록!
+                // 이렇게 하면 남들 화면에서도 화염이 B 플레이어의 총구를 찰떡같이 따라다님!
+                networkFlameObj.transform.SetParent(firePoint);
             }
         }
 

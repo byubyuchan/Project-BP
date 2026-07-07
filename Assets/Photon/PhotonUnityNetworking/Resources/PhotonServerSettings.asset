@@ -81,6 +81,7 @@ MonoBehaviour:
   - RPC_PlayActionSound
   - RPC_KillNPC
   - RPC_ToggleAttachedEffect
+  - RPC_UpdateCountdownText
   DisableAutoOpenWizard: 1
   ShowSettings: 1
   DevRegionSetOnce: 1

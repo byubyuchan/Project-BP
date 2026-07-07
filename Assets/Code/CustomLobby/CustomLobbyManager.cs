@@ -282,6 +282,11 @@ public class CustomLobbyManager : MonoBehaviourPunCallbacks
 
         foreach (var room in cachedRoomList)
         {
+            if (room.CustomProperties.ContainsKey("isQuickMatch") && (bool)room.CustomProperties["isQuickMatch"] == true)
+            {
+                continue;
+            }
+
             string displayRoomName = "";
             if (room.CustomProperties.ContainsKey("roomName"))
             {

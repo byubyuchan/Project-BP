@@ -16,16 +16,11 @@ public class EffectManager : MonoBehaviourPun
 
     void Awake()
     {
-        // 싱글톤 세팅 및 중복 방지
-        if (Instance == null)
+        if (Instance != null && Instance != this)
         {
-            Instance = this;
+            Destroy(Instance.gameObject);
         }
-        else
-        {
-            Destroy(gameObject);
-            return;
-        }
+        Instance = this;
     }
 
     // 1. 모두에게 보이는 폭발

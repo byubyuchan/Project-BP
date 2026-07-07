@@ -9,18 +9,7 @@ public class AutoCameraCanvas : MonoBehaviour
 
     void Awake()
     {
-        // 싱글톤 세팅 및 중복 방지
-        if (Instance == null)
-        {
-            Instance = this;
-            DontDestroyOnLoad(gameObject);
-        }
-        else if (Instance != this)
-        {
-            // 씬에 AutoCameraCanvas가 2개 이상일 경우 짝퉁은 파괴
-            Destroy(gameObject);
-            return;
-        }
+        Instance = this;
 
         if (myCanvas == null)
             myCanvas = GetComponent<Canvas>();

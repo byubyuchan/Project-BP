@@ -1,6 +1,7 @@
 using NUnit.Framework;
 using Photon.Pun;
 using Photon.Realtime;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using TMPro;
@@ -40,6 +41,11 @@ public class WarmupManager : BaseGameManager
 
     private Player targetPlayer;
 
+    // 퀵 매치 관련 변수
+    private bool isQuickMatch = false;
+    private bool isGameStarting = false;
+    private Coroutine quickMatchCoroutine;
+
     new void Start()
     {
         base.Start();
@@ -48,6 +54,12 @@ public class WarmupManager : BaseGameManager
         if (PhotonNetwork.InRoom)
         {
             ResetPlayerGameProperties();
+
+            // 현재 방이 퀵 매치 방인지 커스텀 방인지 확인!
+            if (PhotonNetwork.CurrentRoom.CustomProperties.ContainsKey("isQuickMatch"))
+            {
+                isQuickMatch = (bool)PhotonNetwork.CurrentRoom.CustomProperties["isQuickMatch"];
+            }
         }
 
         hostOptionPanel.SetActive(false);
@@ -59,7 +71,8 @@ public class WarmupManager : BaseGameManager
 
         CloseRoomSettingsPanel();
 
-        if (PhotonNetwork.IsMasterClient)
+        // 퀵 매치면 무조건 시작 버튼 숨김! 커스텀 방일 때만 방장에게 표시
+        if (PhotonNetwork.IsMasterClient && !isQuickMatch)
         {
             startButton.gameObject.SetActive(true);
             startButton.onClick.AddListener(StartGame);
@@ -94,6 +107,9 @@ public class WarmupManager : BaseGameManager
         }
 
         UIManager.Instance.onEmptyEsc = OpenSystemMenu;
+
+        // 씬에 들어왔을 때 이미 2명 이상이면 카운트다운 시작 체크
+        if (isQuickMatch) CheckQuickMatchTimer();
     }
 
     void Update()
@@ -101,7 +117,7 @@ public class WarmupManager : BaseGameManager
         if (hostOptionPanel.activeSelf && Input.GetMouseButtonDown(0))
         {
             RectTransform panelRect = hostOptionPanel.GetComponent<RectTransform>();
-            if(!RectTransformUtility.RectangleContainsScreenPoint(panelRect, Input.mousePosition))
+            if (!RectTransformUtility.RectangleContainsScreenPoint(panelRect, Input.mousePosition))
             {
                 CloseHostOptionPanel();
             }
@@ -124,12 +140,19 @@ public class WarmupManager : BaseGameManager
     {
         UpdatePlayerList();
 
-        if(PhotonNetwork.CurrentRoom.PlayerCount == PhotonNetwork.CurrentRoom.MaxPlayers)
+        // 1. 방이 꽉 찼을 때 자동 시작 (공통)
+        if (PhotonNetwork.CurrentRoom.PlayerCount == PhotonNetwork.CurrentRoom.MaxPlayers)
         {
-            if(PhotonNetwork.IsMasterClient)
+            if (PhotonNetwork.IsMasterClient)
             {
+                if (quickMatchCoroutine != null) StopCoroutine(quickMatchCoroutine);
                 StartGame();
             }
+        }
+        // 2. 퀵 매치 방인데 인원이 들어오면 10초 타이머 리셋!
+        else if (isQuickMatch && PhotonNetwork.IsMasterClient && !isGameStarting)
+        {
+            ResetQuickMatchTimer();
         }
     }
 
@@ -137,14 +160,23 @@ public class WarmupManager : BaseGameManager
     {
         UpdatePlayerList();
 
-        if(PhotonNetwork.IsMasterClient && !startButton.gameObject.activeSelf)
+        if (isQuickMatch)
         {
-            startButton.gameObject.SetActive(true);
-            startButton.onClick.RemoveAllListeners();
-            startButton.onClick.AddListener(StartGame);
+            // 퀵 매치 중 사람이 나가서 2명 미만이 되면 타이머 폭파
+            CheckQuickMatchTimer();
+        }
+        else
+        {
+            // 커스텀 방일 때 방장 시작 버튼 복구
+            if (PhotonNetwork.IsMasterClient && !startButton.gameObject.activeSelf)
+            {
+                startButton.gameObject.SetActive(true);
+                startButton.onClick.RemoveAllListeners();
+                startButton.onClick.AddListener(StartGame);
+            }
         }
 
-        if(targetPlayer == otherPlayer)
+        if (targetPlayer == otherPlayer)
         {
             CloseHostOptionPanel();
         }
@@ -154,20 +186,88 @@ public class WarmupManager : BaseGameManager
     {
         UpdatePlayerList();
 
-        if (PhotonNetwork.IsMasterClient)
+        if (isQuickMatch)
         {
-            startButton.gameObject.SetActive(true);
-            startButton.onClick.RemoveAllListeners();
-            startButton.onClick.AddListener(StartGame);
+            // 방장이 튕겨서 새 방장이 넘겨받으면 타이머 다시 체크!
+            CheckQuickMatchTimer();
         }
         else
         {
-            startButton.gameObject.SetActive(false);
+            if (PhotonNetwork.IsMasterClient)
+            {
+                startButton.gameObject.SetActive(true);
+                startButton.onClick.RemoveAllListeners();
+                startButton.onClick.AddListener(StartGame);
+            }
+            else
+            {
+                startButton.gameObject.SetActive(false);
+            }
         }
     }
 
+    // ==========================================
+    // 퀵 매치 자동 10초 카운트다운 기믹
+    // ==========================================
+    private void CheckQuickMatchTimer()
+    {
+        if (!PhotonNetwork.IsMasterClient || isGameStarting || !isQuickMatch) return;
+
+        if (PhotonNetwork.CurrentRoom.PlayerCount >= 2)
+        {
+            if (quickMatchCoroutine == null) quickMatchCoroutine = StartCoroutine(QuickMatchTimerRoutine());
+        }
+        else
+        {
+            if (quickMatchCoroutine != null)
+            {
+                StopCoroutine(quickMatchCoroutine);
+                quickMatchCoroutine = null;
+            }
+            // ✨ (수정) 부모의 UI 업데이트 RPC 호출
+            photonView.RPC("RPC_UpdateCountdownText", RpcTarget.All, "다른 플레이어를 대기 중...");
+        }
+    }
+
+    private void ResetQuickMatchTimer()
+    {
+        if (!PhotonNetwork.IsMasterClient || isGameStarting || !isQuickMatch) return;
+
+        if (quickMatchCoroutine != null) StopCoroutine(quickMatchCoroutine);
+        quickMatchCoroutine = StartCoroutine(QuickMatchTimerRoutine());
+    }
+
+    private IEnumerator QuickMatchTimerRoutine()
+    {
+        float timer = 10f;
+        while (timer > 0)
+        {
+            photonView.RPC("RPC_UpdateCountdownText", RpcTarget.All, $"매칭 완료! {Mathf.CeilToInt(timer)}초 후 시작합니다...");
+            yield return new WaitForSeconds(1f);
+            timer -= 1f;
+        }
+
+        isGameStarting = true;
+        photonView.RPC("RPC_UpdateCountdownText", RpcTarget.All, "게임 진입 중...");
+
+        // 10초 끝! 기존에 만들어둔 StartGame 함수 호출해서 진입
+        StartGame();
+    }
+
+    [PunRPC]
+    private void RPC_UpdateCountdownText(string msg)
+    {
+        ShowMessage(msg);
+    }
+
+    // ==========================================
+    // 기존 기능들 (강퇴, 설정 등)
+    // ==========================================
     public void OpenHostOptionPanel(Player player, Vector3 mousePos)
     {
+        // 퀵 매치에서는 강퇴/방장위임 금지!
+        if (isQuickMatch) return;
+
         targetPlayer = player;
         targetNameText.text = player.NickName;
         hostOptionPanel.transform.position = mousePos;
@@ -211,10 +311,10 @@ public class WarmupManager : BaseGameManager
             props.Add("CharacterType", "Warrior");
             PhotonNetwork.LocalPlayer.SetCustomProperties(props);
 
-            // IsOpen은 로비 방에는 여전히 뜨지만 다른 사람의 입장을 거부하는 설정
             PhotonNetwork.CurrentRoom.IsOpen = false;
-            // IsVisible은 방이 로비에서 보이지 않도록 설정
             PhotonNetwork.CurrentRoom.IsVisible = false;
+
+            // 기존 5초 카운트다운 로직 호출
             photonView.RPC("RPC_StartCountdown", RpcTarget.All);
         }
     }
@@ -223,12 +323,17 @@ public class WarmupManager : BaseGameManager
     {
         if (PhotonNetwork.IsMasterClient)
         {
+            // 포톤 메시지 큐 정지 (씬 로드 중 에러 방지)
+            PhotonNetwork.IsMessageQueueRunning = false;
             PhotonNetwork.LoadLevel(nextScene);
         }
     }
 
     public void OpenRoomSettingsPanel()
     {
+        // 퀵 매치에서는 방 설정 변경 금지!
+        if (isQuickMatch) return;
+
         UIManager.Instance.ShowPanel(roomSettingsPanel, CloseRoomSettingsPanel);
         Room room = PhotonNetwork.CurrentRoom;
 
@@ -236,7 +341,7 @@ public class WarmupManager : BaseGameManager
         settingsMaxPlayersInput.text = room.MaxPlayers.ToString();
 
         Hashtable cp = room.CustomProperties;
-        if(cp.ContainsKey("roomName")) settingsNameInput.text = cp["roomName"].ToString();
+        if (cp.ContainsKey("roomName")) settingsNameInput.text = cp["roomName"].ToString();
         if (cp.ContainsKey("mode"))
         {
             string currentMode = cp["mode"].ToString();
@@ -269,7 +374,7 @@ public class WarmupManager : BaseGameManager
         Room room = PhotonNetwork.CurrentRoom;
 
         if (string.IsNullOrWhiteSpace(settingsNameInput.text))
-        { 
+        {
             ShowWarning("Please enter a valid room name");
             return;
         }
@@ -339,7 +444,7 @@ public class WarmupManager : BaseGameManager
         UpdatePlayerList();
         CloseRoomSettingsPanel();
 
-        if (PhotonNetwork.IsMasterClient)
+        if (PhotonNetwork.IsMasterClient && !isQuickMatch)
         {
             startButton.gameObject.SetActive(true);
         }
