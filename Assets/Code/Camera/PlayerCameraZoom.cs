@@ -29,14 +29,21 @@ public class PlayerCameraZoom : MonoBehaviourPun, IPunObservable
 
     private float defaultXOffset;
     private float defaultYOffset;
+
     private float defaultFOV;
     private Camera camComponent;
+
+    private float originDefaultFOV;
+    private float originZoomFOV;
 
     private bool isDefaultValuesSet = false;
     private bool isAiming;
 
     [Header("Animation Rigging")]
     public Transform rigAimTarget;
+
+
+
 
     void Awake()
     {
@@ -68,9 +75,15 @@ public class PlayerCameraZoom : MonoBehaviourPun, IPunObservable
             {
                 defaultXOffset = cameraTransform.localPosition.x;
                 defaultYOffset = cameraTransform.localPosition.y;
-                defaultFOV = camComponent.fieldOfView;
+
+                originDefaultFOV = camComponent.fieldOfView;
+                originZoomFOV = zoomFOV;
+
                 isDefaultValuesSet = true;
             }
+
+            defaultFOV = originDefaultFOV;
+            zoomFOV = originZoomFOV;
 
             Vector3 localPos = cameraTransform.localPosition;
             localPos.x = defaultXOffset;
@@ -113,24 +126,35 @@ public class PlayerCameraZoom : MonoBehaviourPun, IPunObservable
 
         isAiming = playerMovement.isLoadingAttack;
 
-        // 마우스 휠 스크롤 값 읽기 (New Input System)
+        float fovChange = 0f;
+
         if (Mouse.current != null)
         {
             float scroll = Mouse.current.scroll.ReadValue().y;
             if (Mathf.Abs(scroll) > 0.01f)
             {
-                if (isAiming)
-                {
-                    // 조준 중일 때는 조준 FOV 조절
-                    zoomFOV -= scroll * scrollSensitivity * 100f;
-                    zoomFOV = Mathf.Clamp(zoomFOV, minAimFOV, maxAimFOV);
-                }
-                else
-                {
-                    // 평상시일 때는 기본 FOV 조절
-                    defaultFOV -= scroll * scrollSensitivity * 100f;
-                    defaultFOV = Mathf.Clamp(defaultFOV, minDefaultFOV, maxDefaultFOV);
-                }
+                fovChange = scroll * scrollSensitivity * 0.01f;
+            }
+        }
+
+        if (MobileZoomButton.currentZoomInput != 0f)
+        {
+            fovChange = MobileZoomButton.currentZoomInput * scrollSensitivity * 0.1f * Time.deltaTime;
+        }
+
+        if (Mathf.Abs(fovChange) > 0.001f)
+        {
+            if (isAiming)
+            {
+                // 조준 중일 때는 조준 FOV 조절
+                zoomFOV -= fovChange;
+                zoomFOV = Mathf.Clamp(zoomFOV, minAimFOV, maxAimFOV);
+            }
+            else
+            {
+                // 평상시일 때는 기본 FOV 조절
+                defaultFOV -= fovChange;
+                defaultFOV = Mathf.Clamp(defaultFOV, minDefaultFOV, maxDefaultFOV);
             }
         }
 

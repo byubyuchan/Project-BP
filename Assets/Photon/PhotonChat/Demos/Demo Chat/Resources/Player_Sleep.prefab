@@ -624,7 +624,7 @@ MonoBehaviour:
   collisionRadius: 4
   obstacleLayer:
     serializedVersion: 2
-    m_Bits: 2039
+    m_Bits: 2047
 --- !u!1 &9004161557164642101
 GameObject:
   m_ObjectHideFlags: 0

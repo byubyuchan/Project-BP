@@ -351,10 +351,24 @@ namespace Photon.Pun.UtilityScripts
             // 3. 회전 처리
             if (!isBlocked)
             {
-                float sensitivity = PlayerPrefs.GetFloat("MouseSensitivity", 1.0f);
-                transform.Rotate(Vector3.up * mouseDelta.x * rotationSpeed * sensitivity);
+                Vector2 finalDelta = mouseDelta; // 기본은 PC 마우스 값
+                float finalSensitivity = PlayerPrefs.GetFloat("MouseSensitivity", 1.0f);
 
-                verticalRotation -= mouseDelta.y * mouseSensitivity * sensitivity;
+                bool isMobileMode = SystemInfo.deviceType == DeviceType.Handheld || Application.isMobilePlatform;
+
+                if (isMobileMode)
+                {
+                    finalDelta = mouseDelta * 100f;
+
+                    finalSensitivity = PlayerPrefs.GetFloat("TouchSensitivity", 1.0f);
+
+                    finalSensitivity *= 0.2f;
+                }
+
+                // 통합된 값 하나로 X축, Y축 회전 
+                transform.Rotate(Vector3.up * finalDelta.x * rotationSpeed * finalSensitivity);
+
+                verticalRotation -= finalDelta.y * mouseSensitivity * finalSensitivity;
                 float currentMax = isLoadingAttack ? zoomUpRange : upRange;
                 float currentMin = isLoadingAttack ? -zoomDownRange : -downRange;
                 verticalRotation = Mathf.Clamp(verticalRotation, currentMin, currentMax);

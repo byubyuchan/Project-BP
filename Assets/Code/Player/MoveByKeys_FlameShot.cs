@@ -12,7 +12,7 @@ namespace Photon.Pun.UtilityScripts
         private GameObject networkFlameObj;
         private ParticleSystem[] flames;
 
-        private Coroutine soundLoopCoroutine;
+        private bool targetFlameState = false;
 
         protected new void OnDisable()
         {
@@ -96,7 +96,6 @@ namespace Photon.Pun.UtilityScripts
         [PunRPC]
         public void RPC_InitFlame(int viewID)
         {
-
             StartCoroutine(WaitAndInitFlameRoutine(viewID));
         }
 
@@ -118,14 +117,17 @@ namespace Photon.Pun.UtilityScripts
                 flames = networkFlameObj.GetComponentsInChildren<ParticleSystem>();
 
                 // 화염 객체를 firePoint의 자식으로 등록!
-                // 이렇게 하면 남들 화면에서도 화염이 B 플레이어의 총구를 찰떡같이 따라다님!
                 networkFlameObj.transform.SetParent(firePoint);
+
+                RPC_SetFlame(targetFlameState);
             }
         }
 
         [PunRPC]
         public void RPC_SetFlame(bool state)
         {
+            targetFlameState = state;
+
             if (flames != null)
             {
                 foreach (var ps in flames)
