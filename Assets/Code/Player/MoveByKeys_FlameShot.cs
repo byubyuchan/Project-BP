@@ -11,6 +11,7 @@ namespace Photon.Pun.UtilityScripts
 
         private GameObject networkFlameObj;
         private ParticleSystem[] flames;
+        private HPController hp;
 
         private bool targetFlameState = false;
 
@@ -21,12 +22,35 @@ namespace Photon.Pun.UtilityScripts
                 photonView.RPC("RPC_SetFlame", RpcTarget.All, false);
             }
 
+            if (networkFlameObj != null)
+            {
+                PhotonNetwork.Destroy(networkFlameObj);
+                networkFlameObj = null;
+            }
+
             base.OnDisable();
         }
 
         protected override void HandleAttack()
         {
             if (isChatting() || isUIMode || isMenuOpen || isSleep) return;
+
+            if (hp == null) hp = GetComponent<HPController>();
+
+            if (hp != null && hp.isDead)
+            {
+                if (isFiring)
+                {
+                    isFiring = false;
+                    photonView.RPC("RPC_SetFlame", RpcTarget.All, false);
+                    if (networkFlameObj != null && photonView.IsMine)
+                    {
+                        PhotonNetwork.Destroy(networkFlameObj);
+                        networkFlameObj = null;
+                    }
+                }
+                return;
+            }
 
             if (isLoadingAttack && isAttackPressed && !animator.GetCurrentAnimatorStateInfo(1).IsName("Attack"))
             {
@@ -117,7 +141,7 @@ namespace Photon.Pun.UtilityScripts
                 flames = networkFlameObj.GetComponentsInChildren<ParticleSystem>();
 
                 // 화염 객체를 firePoint의 자식으로 등록!
-                networkFlameObj.transform.SetParent(firePoint);
+                //networkFlameObj.transform.SetParent(firePoint);
 
                 RPC_SetFlame(targetFlameState);
             }

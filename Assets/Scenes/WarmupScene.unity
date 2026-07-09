@@ -152,7 +152,6 @@ RectTransform:
   - {fileID: 1295767528}
   - {fileID: 2046369236}
   - {fileID: 1593590732}
-  - {fileID: 1275495909}
   m_Father: {fileID: 2144224735}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 1, y: 1}
@@ -174,7 +173,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Image
   m_Material: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 0}
-  m_RaycastTarget: 1
+  m_RaycastTarget: 0
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
   m_OnCullStateChanged:
@@ -9563,6 +9562,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Button_Option
       objectReference: {fileID: 0}
+    - target: {fileID: 1728513650105062, guid: 05f32eddd3e41fd4597ada617b785928, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 114204224268582166, guid: 05f32eddd3e41fd4597ada617b785928, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Mode
       value: 6
@@ -10189,17 +10192,17 @@ RectTransform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1275495905}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 2083181832}
-  m_Father: {fileID: 1554957}
+  m_Father: {fileID: 2144224735}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 1, y: 0}
   m_AnchorMax: {x: 1, y: 0}
-  m_AnchoredPosition: {x: -20, y: 20}
+  m_AnchoredPosition: {x: -40, y: 530.00006}
   m_SizeDelta: {x: 160, y: 50}
   m_Pivot: {x: 1, y: 0}
 --- !u!114 &1275495910
@@ -14895,7 +14898,6 @@ GameObject:
   m_Component:
   - component: {fileID: 1790634272}
   - component: {fileID: 1790634270}
-  - component: {fileID: 1790634273}
   m_Layer: 0
   m_Name: Photon
   m_TagString: Untagged
@@ -14947,29 +14949,6 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1790634273
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1790634269}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7ce7856d2b989a64fb28cf8289bcf12a, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  playerPrefabs:
-  - {fileID: 5254184595196352773, guid: 62a30322e0251cc4cbfcb7e6095a3bca, type: 3}
-  canvas: {fileID: 0}
-  spawnZones:
-  - {fileID: 1765856788}
-  - {fileID: 1612046761}
-  - {fileID: 92850820}
-  - {fileID: 584300134}
-  ghostCamera: {fileID: 4970134331989797762, guid: 4c37d0e43b311fb4fbaa53ce529369d6, type: 3}
-  effectIndex: 2
-  offset: 15
 --- !u!1 &1841080407
 GameObject:
   m_ObjectHideFlags: 0
@@ -15771,15 +15750,15 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Touchpad
   m_LookControlPath: <Gamepad>/rightStick
-  lookSensitivity: 0.5
   virtualAttackButton: {fileID: 823064920}
   attackButtonRect: {fileID: 823064918}
-  zoomInButton: {fileID: 0}
-  zoomInRect: {fileID: 0}
-  zoomOutButton: {fileID: 0}
-  zoomOutRect: {fileID: 0}
+  zoomInButton: {fileID: 31455027}
+  zoomInRect: {fileID: 31455024}
+  zoomOutButton: {fileID: 2027575656}
+  zoomOutRect: {fileID: 2027575653}
   tapTimeLimit: 0.2
   tapDistanceLimit: 20
+  isDragging: 0
 --- !u!114 &1898581871
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -18757,40 +18736,43 @@ PrefabInstance:
     m_AddedGameObjects:
     - targetCorrespondingSourceObject: {fileID: 5979851889096361472, guid: e99a338ad3ae1454b9acf87429b60ea6, type: 3}
       insertIndex: -1
-      addedObject: {fileID: 581637778}
-    - targetCorrespondingSourceObject: {fileID: 5979851889096361472, guid: e99a338ad3ae1454b9acf87429b60ea6, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 1898581868}
-    - targetCorrespondingSourceObject: {fileID: 5979851889096361472, guid: e99a338ad3ae1454b9acf87429b60ea6, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 1846710316}
-    - targetCorrespondingSourceObject: {fileID: 5979851889096361472, guid: e99a338ad3ae1454b9acf87429b60ea6, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 1210152422}
-    - targetCorrespondingSourceObject: {fileID: 5979851889096361472, guid: e99a338ad3ae1454b9acf87429b60ea6, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 1854388945}
-    - targetCorrespondingSourceObject: {fileID: 5979851889096361472, guid: e99a338ad3ae1454b9acf87429b60ea6, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 923753946}
-    - targetCorrespondingSourceObject: {fileID: 5979851889096361472, guid: e99a338ad3ae1454b9acf87429b60ea6, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 1554957}
-    - targetCorrespondingSourceObject: {fileID: 5979851889096361472, guid: e99a338ad3ae1454b9acf87429b60ea6, type: 3}
-      insertIndex: -1
       addedObject: {fileID: 1064203298}
     - targetCorrespondingSourceObject: {fileID: 5979851889096361472, guid: e99a338ad3ae1454b9acf87429b60ea6, type: 3}
       insertIndex: -1
       addedObject: {fileID: 541657680}
     - targetCorrespondingSourceObject: {fileID: 5979851889096361472, guid: e99a338ad3ae1454b9acf87429b60ea6, type: 3}
       insertIndex: -1
+      addedObject: {fileID: 483345896}
+    - targetCorrespondingSourceObject: {fileID: 5979851889096361472, guid: e99a338ad3ae1454b9acf87429b60ea6, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 581637778}
+    - targetCorrespondingSourceObject: {fileID: 5979851889096361472, guid: e99a338ad3ae1454b9acf87429b60ea6, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1846710316}
+    - targetCorrespondingSourceObject: {fileID: 5979851889096361472, guid: e99a338ad3ae1454b9acf87429b60ea6, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1854388945}
+    - targetCorrespondingSourceObject: {fileID: 5979851889096361472, guid: e99a338ad3ae1454b9acf87429b60ea6, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1554957}
+    - targetCorrespondingSourceObject: {fileID: 5979851889096361472, guid: e99a338ad3ae1454b9acf87429b60ea6, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1898581868}
+    - targetCorrespondingSourceObject: {fileID: 5979851889096361472, guid: e99a338ad3ae1454b9acf87429b60ea6, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1275495909}
+    - targetCorrespondingSourceObject: {fileID: 5979851889096361472, guid: e99a338ad3ae1454b9acf87429b60ea6, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1210152422}
+    - targetCorrespondingSourceObject: {fileID: 5979851889096361472, guid: e99a338ad3ae1454b9acf87429b60ea6, type: 3}
+      insertIndex: -1
       addedObject: {fileID: 1239658444}
     - targetCorrespondingSourceObject: {fileID: 5979851889096361472, guid: e99a338ad3ae1454b9acf87429b60ea6, type: 3}
       insertIndex: -1
-      addedObject: {fileID: 692475469}
+      addedObject: {fileID: 923753946}
     - targetCorrespondingSourceObject: {fileID: 5979851889096361472, guid: e99a338ad3ae1454b9acf87429b60ea6, type: 3}
       insertIndex: -1
-      addedObject: {fileID: 483345896}
+      addedObject: {fileID: 692475469}
     - targetCorrespondingSourceObject: {fileID: 5979851889096361472, guid: e99a338ad3ae1454b9acf87429b60ea6, type: 3}
       insertIndex: -1
       addedObject: {fileID: 1197047285}

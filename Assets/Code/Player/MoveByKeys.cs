@@ -291,7 +291,7 @@ namespace Photon.Pun.UtilityScripts
 
             if (isGrounded && velocity.y <= 0)
             {
-                finalMove.y = -100f;
+                finalMove.y = -10f;
             }
 
             controller.Move(finalMove * Time.deltaTime);
@@ -358,11 +358,11 @@ namespace Photon.Pun.UtilityScripts
 
                 if (isMobileMode)
                 {
-                    finalDelta = mouseDelta * 100f;
+                    finalDelta = Touchpad.Instance.MobileDragDelta * 0.1f;
 
                     finalSensitivity = PlayerPrefs.GetFloat("TouchSensitivity", 1.0f);
 
-                    finalSensitivity *= 0.2f;
+                    finalSensitivity *= 0.1f;
                 }
 
                 // 통합된 값 하나로 X축, Y축 회전 

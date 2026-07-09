@@ -84,20 +84,24 @@ public class AudioManager : MonoBehaviour
             return;
         }
 
+        BGMVolume = PlayerPrefs.GetFloat("BGMVolume", 0.5f);
+        AmbientVolume = PlayerPrefs.GetFloat("BGMVolume", 0.5f);
+        SFXVolume = PlayerPrefs.GetFloat("SFXVolume", 0.5f);
+
         Init();
 
         // UI ø¨∞·
-        if (BGMScrollbar != null)
-        {
-            BGMScrollbar.value = BGMVolume;
-            BGMScrollbar.onValueChanged.AddListener(SetBGMVolume);
-            BGMScrollbar.onValueChanged.AddListener(SetAmbVolume);
-        }
-        if (SFXScrollbar != null)
-        {
-            SFXScrollbar.value = SFXVolume;
-            SFXScrollbar.onValueChanged.AddListener(SetSFXVolume);
-        }
+        //if (BGMScrollbar != null)
+        //{
+        //    BGMScrollbar.value = BGMVolume;
+        //    BGMScrollbar.onValueChanged.AddListener(SetBGMVolume);
+        //    BGMScrollbar.onValueChanged.AddListener(SetAmbVolume);
+        //}
+        //if (SFXScrollbar != null)
+        //{
+        //    SFXScrollbar.value = SFXVolume;
+        //    SFXScrollbar.onValueChanged.AddListener(SetSFXVolume);
+        //}
 
         // µÒº≈≥ ∏Æ √ ±‚»≠
         BGMDict = new Dictionary<string, AudioClip>();
@@ -342,7 +346,7 @@ public class AudioManager : MonoBehaviour
     public void SetAmbVolume(float volume)
     {
         AmbientVolume = volume;
-        if (AmbientPlayer != null) AmbientPlayer.volume = AmbientVolume;
+        if (AmbientPlayer != null) AmbientPlayer.volume = BGMVolume;
     }
 
     public void SetSFXVolume(float volume)
