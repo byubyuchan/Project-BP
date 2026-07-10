@@ -103,6 +103,7 @@ GameObject:
   - component: {fileID: 5184764532036193780}
   - component: {fileID: 8638229319713220202}
   - component: {fileID: 5885036540379647521}
+  - component: {fileID: 6089085520452069492}
   m_Layer: 5
   m_Name: CrossHair
   m_TagString: Crosshair
@@ -170,6 +171,31 @@ MonoBehaviour:
   - {fileID: 2518720643632342369}
   - {fileID: 3719950644781665631}
   cooldownRingImage: {fileID: 3159467928366636031}
+--- !u!114 &6089085520452069492
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6389373604242695664}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8e5f19a393c56b34faf52c814f3c4e49, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::CrosshairVisualSync
+  sizeTargetRect: {fileID: 8504526713881345732}
+  shapeObjects:
+  - {fileID: 54461692098173648}
+  - {fileID: 6651484929685386558}
+  cooldownObject: {fileID: 7035824771232633522}
+  allColorImages:
+  - {fileID: 2518720643632342369}
+  - {fileID: 3719950644781665631}
+  - {fileID: 3159467928366636031}
+  allOutlines:
+  - {fileID: 3586243133831470091}
+  - {fileID: 1184488202269729178}
+  - {fileID: 2189558784483330214}
 --- !u!1 &6651484929685386558
 GameObject:
   m_ObjectHideFlags: 0

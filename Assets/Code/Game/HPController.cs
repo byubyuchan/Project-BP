@@ -1,7 +1,10 @@
 using Photon.Pun;
 using Photon.Pun.Demo.PunBasics;
+using Photon.Pun.UtilityScripts;
+using Photon.Realtime;
 using System.Collections;
 using UnityEngine;
+using UnityEngine.InputSystem; // PlayerInput 사용을 위해 추가
 
 public class HPController : MonoBehaviourPunCallbacks, IPunObservable
 {
@@ -22,7 +25,7 @@ public class HPController : MonoBehaviourPunCallbacks, IPunObservable
     {
         maxHp = Hp;
     }
-    
+
     private new void OnEnable()
     {
         base.OnEnable();
@@ -35,13 +38,11 @@ public class HPController : MonoBehaviourPunCallbacks, IPunObservable
             if (moveScript != null)
             {
                 moveScript.enabled = true;
+                moveScript.isUIMode = false;
+                moveScript.isMenuOpen = false;
             }
 
-            var inputSystem = GetComponent<UnityEngine.InputSystem.PlayerInput>();
-            if (inputSystem != null)
-            {
-                inputSystem.enabled = true;
-            }
+            StartCoroutine(SafeInputBoot());
         }
 
         if (this.UIprefab != null)
@@ -50,12 +51,29 @@ public class HPController : MonoBehaviourPunCallbacks, IPunObservable
         }
     }
 
+    private IEnumerator SafeInputBoot()
+    {
+        var inputSystem = GetComponent<PlayerInput>();
+        if (inputSystem != null)
+        {
+            inputSystem.enabled = false;
+
+            yield return new WaitForSeconds(0.2f);
+
+            if (photonView != null && photonView.IsMine && !isDead)
+            {
+                inputSystem.enabled = true;
+                Debug.Log("<color=yellow>[Input] 안전 부팅 완료! (Player Index 꼬임 방지)</color>");
+            }
+        }
+    }
+
     // 캐릭터가 제대로 생성된 후 OnEnable 시작
     private IEnumerator InitPlayerUIRoutine()
     {
         while (photonView == null || photonView.Owner == null)
         {
-            yield return null; // 다음 프레임에 다시 확인
+            yield return null;
         }
 
         myUIInstance = Instantiate(this.UIprefab, Vector3.zero, Quaternion.identity);
@@ -75,7 +93,6 @@ public class HPController : MonoBehaviourPunCallbacks, IPunObservable
         photonView.RPC("RPC_BroadcastDie", RpcTarget.All);
     }
 
-    // Photon Update()
     public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)
     {
         if (stream.IsWriting)
@@ -88,7 +105,6 @@ public class HPController : MonoBehaviourPunCallbacks, IPunObservable
         }
     }
 
-    // RPC를 발생시킨 객체가 this
     [PunRPC]
     private void RPC_BroadcastDie()
     {
@@ -97,8 +113,16 @@ public class HPController : MonoBehaviourPunCallbacks, IPunObservable
 
         if (photonView.IsMine)
         {
+            var moveScript = GetComponent<MoveByKeys>();
+            if (moveScript != null && moveScript.isLoadingAttack)
+            {
+                moveScript.isLoadingAttack = false;
+                photonView.RPC("RPC_LoadAction", RpcTarget.All, "ReadyToAttack", false);
+            }
+
             if (PlayerSpawner.instance != null)
             {
+                photonView.RPC("RPC_SizeReset", RpcTarget.All);
                 PlayerSpawner.instance.RequestRespawn(gameObject, respawnDelay);
             }
         }

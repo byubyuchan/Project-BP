@@ -199,6 +199,7 @@ public class PlayerSpawner : MonoBehaviourPunCallbacks
         spawnPos.x += Random.Range(-offset, offset);
 
         player = PhotonNetwork.Instantiate(playerPrefabs[randomPrefabIndex].name, spawnPos, spawnRot);
+        
     }
 
     // 회전 방향을 직접 받아옴.

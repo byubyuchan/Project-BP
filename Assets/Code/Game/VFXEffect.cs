@@ -15,7 +15,5 @@ public class VFXEffect : MonoBehaviour
             int randomIndex = Random.Range(0, clipNames.Length);
             AudioManager.instance.PlaySFX(clipNames[randomIndex], transform.position);
         }
-
     }
-
 }

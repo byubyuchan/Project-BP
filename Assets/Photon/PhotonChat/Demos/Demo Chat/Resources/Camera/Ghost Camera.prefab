@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 4203551663324060292}
   - component: {fileID: -6963994484360331610}
   - component: {fileID: 3451428309406519882}
+  - component: {fileID: 9112731242044897353}
   - component: {fileID: 1115737758043911039}
   - component: {fileID: 7668039944167690208}
   m_Layer: 0
@@ -94,7 +95,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4970134331989797762}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 618b0e3f6c65dd247a4a016150006c57, type: 3}
   m_Name: 
@@ -112,6 +113,23 @@ AudioListener:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4970134331989797762}
   m_Enabled: 1
+--- !u!114 &9112731242044897353
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4970134331989797762}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1fd89d9a55a149a4499de8ff2873399a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::CustomFreeCamera
+  m_LookSpeedController: 189
+  m_LookSpeedMouse: 60
+  m_MoveSpeed: 100
+  m_MoveSpeedIncrement: 2.5
+  m_Turbo: 3
 --- !u!114 &1115737758043911039
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -183,8 +201,8 @@ MonoBehaviour:
       colorBlindnessType: 0
       colorBlindnessStrength: 1
   m_Resources: {fileID: 11400000, guid: d82512f9c8e5d4a4d938b575d47f88d4, type: 2}
-  m_ShowToolkit: 0
-  m_ShowCustomSorter: 0
+  m_ShowToolkit: 1
+  m_ShowCustomSorter: 1
   breakBeforeColorGrading: 0
   m_BeforeTransparentBundles: []
   m_BeforeStackBundles: []

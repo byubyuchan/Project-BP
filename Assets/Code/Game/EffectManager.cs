@@ -1,11 +1,11 @@
 using Photon.Pun;
 using Photon.Pun.UtilityScripts;
+using Photon.Realtime;
 using System.Collections;
 using System.Collections.Generic;
-using Unity.VisualScripting;
 using UnityEngine;
 
-public class EffectManager : MonoBehaviourPun
+public class EffectManager : MonoBehaviourPunCallbacks
 {
     public static EffectManager Instance;
 
@@ -13,6 +13,9 @@ public class EffectManager : MonoBehaviourPun
     public GameObject[] localScreenEffects;
 
     private Dictionary<GameObject, Coroutine> effectCoroutines = new Dictionary<GameObject, Coroutine>();
+
+    // Key: "캐릭터ViewID_이펙트인덱스", Value: 생성된 이펙트 GameObject
+    private Dictionary<string, GameObject> activeLoopEffects = new Dictionary<string, GameObject>();
 
     void Awake()
     {
@@ -79,7 +82,6 @@ public class EffectManager : MonoBehaviourPun
             {
                 if (effectObj.TryGetComponent<ParticleSystem>(out ParticleSystem ps))
                 {
-                    
                     ps.Stop(true, ParticleSystemStopBehavior.StopEmittingAndClear);
                 }
                 effectObj.SetActive(false);
@@ -112,7 +114,6 @@ public class EffectManager : MonoBehaviourPun
             if (effectObj.TryGetComponent<ParticleSystem>(out ParticleSystem ps))
             {
                 ps.Stop(true, ParticleSystemStopBehavior.StopEmittingAndClear);
-
                 ps.Play(true);
             }
         }
@@ -146,43 +147,80 @@ public class EffectManager : MonoBehaviourPun
     {
         if (index >= explosionEffects.Length) return;
 
-        PhotonView targetPV = PhotonView.Find(targetViewID);
-        if (targetPV == null) return;
-
-        Transform spineTransform = targetPV.transform;
-        MoveByKeys moveScript = targetPV.GetComponent<MoveByKeys>();
-
-        if (moveScript != null && moveScript.effectTransform != null)
-        {
-            spineTransform = moveScript.effectTransform;
-        }
-
-        string targetEffectName = explosionEffects[index].name;
+        string key = targetViewID + "_" + index;
 
         if (isON)
         {
-            foreach (Transform child in spineTransform)
+            // 중복 생성 원천 차단
+            if (activeLoopEffects.ContainsKey(key) && activeLoopEffects[key] != null) return;
+
+            PhotonView targetPV = PhotonView.Find(targetViewID);
+            if (targetPV == null) return;
+
+            Transform spineTransform = targetPV.transform;
+            MoveByKeys moveScript = targetPV.GetComponent<MoveByKeys>();
+
+            if (moveScript != null && moveScript.effectTransform != null)
             {
-                if (child.name.Contains(targetEffectName)) return;
+                spineTransform = moveScript.effectTransform;
             }
+
+            string targetEffectName = explosionEffects[index].name;
 
             GameObject fx = PhotonPoolingManager.instance.Instantiate("VFX/" + targetEffectName, spineTransform.position, spineTransform.rotation);
             fx.transform.SetParent(spineTransform);
             fx.SetActive(true);
+
+            activeLoopEffects[key] = fx;
         }
         else
         {
-            foreach (Transform child in spineTransform)
+            // 꺼질 때는 장부에서 찾아서 안전하게 반납
+            if (activeLoopEffects.TryGetValue(key, out GameObject fx))
             {
-                if (child.name.Contains(targetEffectName))
+                if (fx != null)
                 {
-                    GameObject fx = child.gameObject;
-
                     StopEffectCoroutine(fx);
                     effectCoroutines[fx] = StartCoroutine(ReturnToPoolRoutine(fx, 0.1f));
-                    break;
+                }
+                activeLoopEffects.Remove(key);
+            }
+        }
+    }
+
+    public override void OnPlayerLeftRoom(Player otherPlayer)
+    {
+        base.OnPlayerLeftRoom(otherPlayer);
+
+        List<string> keysToRemove = new List<string>();
+
+        // 현재 돌아가는 모든 루핑 장부를 전수조사
+        foreach (var kvp in activeLoopEffects)
+        {
+            string[] parts = kvp.Key.Split('_');
+            if (parts.Length > 0 && int.TryParse(parts[0], out int viewID))
+            {
+                if (viewID / 1000 == otherPlayer.ActorNumber || kvp.Value == null)
+                {
+                    keysToRemove.Add(kvp.Key);
                 }
             }
+        }
+
+        foreach (string key in keysToRemove)
+        {
+            if (activeLoopEffects.TryGetValue(key, out GameObject fx))
+            {
+                if (fx != null)
+                {
+                    StopEffectCoroutine(fx);
+                    fx.SetActive(false);
+                    fx.transform.SetParent(PhotonPoolingManager.instance.transform);
+                    PhotonPoolingManager.instance.Destroy(fx);
+                    Debug.Log($"<color=red>[EffectManager] 탈주 플레이어의 고아 이펙트 강제 철거 완료: {key}</color>");
+                }
+            }
+            activeLoopEffects.Remove(key);
         }
     }
 }

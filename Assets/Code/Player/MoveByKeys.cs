@@ -124,6 +124,7 @@ namespace Photon.Pun.UtilityScripts
                 isLoadingAttack = false;
                 rawMoveInput = Vector2.zero;
                 rawLookInput = Vector2.zero;
+                transform.localScale = localSize;
 
                 impact = Vector3.zero;
                 velocity = Vector3.zero;
@@ -204,7 +205,11 @@ namespace Photon.Pun.UtilityScripts
 
         void OnAim()
         {
-            if (!photonView.IsMine) return; // Ãß°¡
+            if (!photonView.IsMine) return;
+
+            HPController hp = GetComponent<HPController>();
+            if (hp != null && hp.isDead) return;
+
             if (isChatting() || isUIMode || isMenuOpen || isSleep) return;
 
             bool isCurrentAttack = animator.GetCurrentAnimatorStateInfo(1).IsName("Attack");
