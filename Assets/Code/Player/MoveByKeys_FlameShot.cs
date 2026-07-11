@@ -15,6 +15,17 @@ namespace Photon.Pun.UtilityScripts
 
         private bool targetFlameState = false;
 
+        public override void OnEnable()
+        {
+            isFiring = false;
+            networkFlameObj = null;
+            flames = null;
+            targetFlameState = false;
+            hp = GetComponent<HPController>();
+
+            base.OnEnable();
+        }
+
         protected new void OnDisable()
         {
             if (photonView.IsMine && isFiring)

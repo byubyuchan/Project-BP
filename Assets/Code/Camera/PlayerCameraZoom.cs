@@ -26,6 +26,7 @@ public class PlayerCameraZoom : MonoBehaviourPun, IPunObservable
     public float maxAimFOV = 90f;           // 조준 시 최대 줌아웃 FOV
 
     public GameObject crosshairImage;
+    private CrosshairController gameplayCrosshair;
 
     private float defaultXOffset;
     private float defaultYOffset;
@@ -54,11 +55,8 @@ public class PlayerCameraZoom : MonoBehaviourPun, IPunObservable
     {
         if (!photonView.IsMine) return;
 
-        if (CrosshairController.instance != null)
-        {
-            crosshairImage = CrosshairController.instance.gameObject;
-            crosshairImage.SetActive(false);
-        }
+        ResolveGameplayCrosshair();
+        SetCrosshairVisible(false);
 
         if (playerMovement != null)
         {
@@ -106,6 +104,8 @@ public class PlayerCameraZoom : MonoBehaviourPun, IPunObservable
 
     void OnDisable()
     {
+        if (photonView != null && photonView.IsMine) SetCrosshairVisible(false);
+
         if (camComponent != null && AutoCameraCanvas.Instance != null)
         {
             if (EffectManager.Instance != null)
@@ -119,12 +119,13 @@ public class PlayerCameraZoom : MonoBehaviourPun, IPunObservable
 
     void Update()
     {
-        if (!photonView.IsMine || playerMovement == null || cameraTransform == null || camComponent == null || crosshairImage == null) return;
-
-        // 상태창이나 채팅창 열려있으면 휠 줌 안 먹히게 방어
-        if (playerMovement.isMenuOpen || playerMovement.isUIMode) return;
+        if (!photonView.IsMine || playerMovement == null || cameraTransform == null || camComponent == null) return;
 
         isAiming = playerMovement.isLoadingAttack;
+        ResolveGameplayCrosshair();
+        SetCrosshairVisible(isAiming);
+
+        bool isUiBlockingZoomInput = playerMovement.isMenuOpen || playerMovement.isUIMode;
 
         float fovChange = 0f;
 
@@ -161,8 +162,7 @@ public class PlayerCameraZoom : MonoBehaviourPun, IPunObservable
         float targetX = isAiming ? zoomXOffset : defaultXOffset;
         float targetFOV = isAiming ? zoomFOV : defaultFOV;
 
-        if (crosshairImage.activeSelf == isAiming &&
-            Mathf.Abs(cameraTransform.localPosition.x - targetX) < 0.001f &&
+        if (Mathf.Abs(cameraTransform.localPosition.x - targetX) < 0.001f &&
             Mathf.Abs(camComponent.fieldOfView - targetFOV) < 0.01f)
         {
             return;
@@ -173,7 +173,7 @@ public class PlayerCameraZoom : MonoBehaviourPun, IPunObservable
 
     private void LateUpdate()
     {
-        if (photonView.IsMine)
+        if (photonView.IsMine && Camera.main != null && playerMovement != null && rigAimTarget != null)
         {
             Ray ray = Camera.main.ViewportPointToRay(new Vector3(0.5f, 0.5f, 0));
             Vector3 hitPoint = ray.GetPoint(playerMovement.maxRange);
@@ -187,10 +187,7 @@ public class PlayerCameraZoom : MonoBehaviourPun, IPunObservable
         float targetY = isAiming ? zoomYOffset : defaultYOffset;
         float targetFOV = isAiming ? zoomFOV : defaultFOV;
 
-        if (crosshairImage.activeSelf != isAiming)
-        {
-            crosshairImage.SetActive(isAiming);
-        }
+        SetCrosshairVisible(isAiming);
 
         // 부드러운 카메라 무빙 Lerp
         Vector3 localPos = cameraTransform.localPosition;
@@ -202,16 +199,30 @@ public class PlayerCameraZoom : MonoBehaviourPun, IPunObservable
         camComponent.fieldOfView = Mathf.Lerp(camComponent.fieldOfView, targetFOV, Time.deltaTime * zoomSpeed);
     }
 
-    private void ResetCrosshair()
+    private void ResolveGameplayCrosshair()
     {
-        if (crosshairImage == null)
+        if (gameplayCrosshair == null || gameplayCrosshair.IsPreview)
         {
-            crosshairImage = GameObject.FindWithTag("Crosshair");
+            gameplayCrosshair = CrosshairController.GameplayInstance;
         }
 
-        if (crosshairImage != null)
+        if (gameplayCrosshair != null)
         {
-            crosshairImage.SetActive(false);
+            crosshairImage = gameplayCrosshair.gameObject;
+        }
+    }
+
+    private void SetCrosshairVisible(bool visible)
+    {
+        ResolveGameplayCrosshair();
+
+        if (gameplayCrosshair != null)
+        {
+            gameplayCrosshair.SetGameplayVisible(visible);
+        }
+        else if (crosshairImage != null)
+        {
+            crosshairImage.SetActive(visible);
         }
     }
 

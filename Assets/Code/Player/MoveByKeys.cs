@@ -88,23 +88,6 @@ namespace Photon.Pun.UtilityScripts
             controller = GetComponent<CharacterController>();
             animator = GetComponent<Animator>();
             localSize = transform.localScale;
-        }
-
-        public void Start()
-        {
-            if (!photonView.IsMine)
-            {
-                if (TryGetComponent<PlayerInput>(out PlayerInput pi))
-                {
-                    pi.enabled = false;
-                }
-                this.enabled = false;
-
-                return;
-            }
-
-            Cursor.lockState = CursorLockMode.Locked;
-            Cursor.visible = false;
             originalSpeed = speed;
 
             if (TryGetComponent<Rigidbody>(out Rigidbody rb))
@@ -116,28 +99,80 @@ namespace Photon.Pun.UtilityScripts
         public override void OnEnable()
         {
             base.OnEnable();
-
-            if (photonView.IsMine)
-            {
-                isUIMode = false;
-                isMenuOpen = false;
-                isLoadingAttack = false;
-                rawMoveInput = Vector2.zero;
-                rawLookInput = Vector2.zero;
-                transform.localScale = localSize;
-
-                impact = Vector3.zero;
-                velocity = Vector3.zero;
-
-                SetLayerRecursively(gameObject, LayerMask.NameToLayer("LocalPlayer"));
-                UpdateCursorState();
-            }
+            ResetTransientState();
+            ConfigureInputForCurrentOwner();
         }
 
         public override void OnDisable()
         {
             SetLayerRecursively(gameObject, LayerMask.NameToLayer("Player"));
             base.OnDisable();
+        }
+
+        // 포톤 프리팹 풀은 비활성화된 컴포넌트 상태까지 그대로 재사용한다.
+        // 이전에 원격 플레이어로 사용된 프리팹이 MoveByKeys와 PlayerInput이
+        // 꺼진 상태로 반환되지 않도록 명시적으로 초기화한다.
+        public void PrepareForNetworkReuse()
+        {
+            enabled = true;
+
+            if (TryGetComponent<PlayerInput>(out PlayerInput playerInput))
+            {
+                playerInput.enabled = true;
+            }
+
+            if (controller == null) controller = GetComponent<CharacterController>();
+            if (controller != null) controller.enabled = true;
+
+            ResetTransientState();
+        }
+
+        private void ResetTransientState()
+        {
+            isUIMode = false;
+            isMenuOpen = false;
+            isSleep = false;
+            isLoadingAttack = false;
+            isAttackPressed = false;
+            isBlocked = false;
+            isInvincible = false;
+
+            horizontalInput = 0f;
+            verticalInput = 0f;
+            rawMoveInput = Vector2.zero;
+            rawLookInput = Vector2.zero;
+            mouseDelta = Vector2.zero;
+            impact = Vector3.zero;
+            velocity = Vector3.zero;
+            verticalRotation = 0f;
+            lastAttackerId = -1;
+            currentItem = null;
+
+            if (originalSpeed > 0f) speed = originalSpeed;
+            if (localSize != Vector3.zero) transform.localScale = localSize;
+        }
+
+        private void ConfigureInputForCurrentOwner()
+        {
+            // 포톤은 풀에서 꺼낸 객체의 PhotonView 정보를 갱신한 뒤
+            // OnEnable을 호출하므로 이 시점의 IsMine 값을 바로 사용한다.
+            bool isLocalPlayer = photonView != null && photonView.IsMine;
+
+            if (TryGetComponent<PlayerInput>(out PlayerInput playerInput))
+            {
+                playerInput.enabled = isLocalPlayer;
+            }
+
+            if (isLocalPlayer)
+            {
+                SetLayerRecursively(gameObject, LayerMask.NameToLayer("LocalPlayer"));
+                UpdateCursorState();
+            }
+            else
+            {
+                SetLayerRecursively(gameObject, LayerMask.NameToLayer("Player"));
+                enabled = false;
+            }
         }
 
         void SetLayerRecursively(GameObject obj, int newLayer)
@@ -205,11 +240,7 @@ namespace Photon.Pun.UtilityScripts
 
         void OnAim()
         {
-            if (!photonView.IsMine) return;
-
-            HPController hp = GetComponent<HPController>();
-            if (hp != null && hp.isDead) return;
-
+            if (!photonView.IsMine) return; // 추가
             if (isChatting() || isUIMode || isMenuOpen || isSleep) return;
 
             bool isCurrentAttack = animator.GetCurrentAnimatorStateInfo(1).IsName("Attack");
@@ -323,7 +354,7 @@ namespace Photon.Pun.UtilityScripts
             if (!photonView.IsMine) return;
 
             if (Camera.main == null) return;
-           
+
             HandleFootstepTimer();
 
             // 1. 상태 체크 (채팅/메뉴/UI모드일 때 입력값 강제 0 처리)
@@ -370,7 +401,7 @@ namespace Photon.Pun.UtilityScripts
                     finalSensitivity *= 0.1f;
                 }
 
-                // 통합된 값 하나로 X축, Y축 회전 
+                // 통합된 값 하나로 X축, Y축 회전
                 transform.Rotate(Vector3.up * finalDelta.x * rotationSpeed * finalSensitivity);
 
                 verticalRotation -= finalDelta.y * mouseSensitivity * finalSensitivity;
@@ -415,7 +446,7 @@ namespace Photon.Pun.UtilityScripts
             //photonView.RPC("RPC_LoadAction", RpcTarget.All, "ReadyToAttack", isLoadingAttack);
 
             Ray ray = Camera.main.ViewportPointToRay(new Vector3(0.5f, 0.5f, 0));
-            RaycastHit hit; 
+            RaycastHit hit;
             Vector3 targetPoint;
 
             if (Physics.Raycast(ray, out hit, maxRange, ~aimLayerMask))
@@ -445,7 +476,7 @@ namespace Photon.Pun.UtilityScripts
             {
                 RaycastHit hit;
 
-                Vector3 rayStart = transform.position + new Vector3(0,10f,0);
+                Vector3 rayStart = transform.position + new Vector3(0, 10f, 0);
 
                 // 플레이어의 y축 10f 에서부터 아래로 50f까지 바닥 찾기
                 if (Physics.Raycast(rayStart, Vector3.down, out hit, 50f))

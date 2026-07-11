@@ -1,10 +1,11 @@
-using System.Xml.Serialization;
 using UnityEngine;
 using UnityEngine.UI;
 
 public class CrosshairController : MonoBehaviour
 {
     public static CrosshairController instance;
+
+    public static CrosshairController GameplayInstance => instance;
 
     [Header("Crosshair Elements")]
     public Image[] shapeImages;
@@ -13,13 +14,26 @@ public class CrosshairController : MonoBehaviour
     private Color currentColor = Color.white;
     private float currentOpacity = 1.0f;
     private bool isCooldownOptionOn = true;
+    private CanvasGroup visibilityGroup;
+    private bool isPreview;
+
+    public bool IsPreview => isPreview;
+    public bool IsGameplayVisible { get; private set; } = true;
 
     private void Awake()
     {
-        instance = this;
+        isPreview = GetComponentInParent<CrosshairOptionPage>(true) != null;
+
+        if (!isPreview)
+        {
+            instance = this;
+            visibilityGroup = GetComponent<CanvasGroup>();
+            if (visibilityGroup == null) visibilityGroup = gameObject.AddComponent<CanvasGroup>();
+            SetGameplayVisible(false);
+        }
     }
 
-    private void Start()
+    private void RefreshFromPrefs()
     {
         currentOpacity = PlayerPrefs.GetFloat("CrosshairOpacity", 1.0f);
 
@@ -51,6 +65,10 @@ public class CrosshairController : MonoBehaviour
         BaseOptionManager.OnCrosshairSizeChanged += ApplySize;
         BaseOptionManager.OnOutlineVisibilityChanged += ApplyOutlineVisibility;
         BaseOptionManager.OnOutlineThicknessChanged += ApplyOutlineThickness;
+
+        // A preview or the HUD may have been inactive while settings changed.
+        // Always rebuild its visuals from the saved values when it comes back.
+        RefreshFromPrefs();
     }
 
     private void OnDisable()
@@ -62,6 +80,27 @@ public class CrosshairController : MonoBehaviour
         BaseOptionManager.OnCrosshairSizeChanged -= ApplySize;
         BaseOptionManager.OnOutlineVisibilityChanged -= ApplyOutlineVisibility;
         BaseOptionManager.OnOutlineThicknessChanged -= ApplyOutlineThickness;
+    }
+
+    private void OnDestroy()
+    {
+        if (instance == this) instance = null;
+    }
+
+    public void SetGameplayVisible(bool visible)
+    {
+        if (isPreview) return;
+
+        if (visibilityGroup == null)
+        {
+            visibilityGroup = GetComponent<CanvasGroup>();
+            if (visibilityGroup == null) visibilityGroup = gameObject.AddComponent<CanvasGroup>();
+        }
+
+        IsGameplayVisible = visible;
+        visibilityGroup.alpha = visible ? 1f : 0f;
+        visibilityGroup.interactable = false;
+        visibilityGroup.blocksRaycasts = false;
     }
 
     private void ApplyColor(Color newColor)
