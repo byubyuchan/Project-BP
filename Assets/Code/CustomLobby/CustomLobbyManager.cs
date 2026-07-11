@@ -57,6 +57,9 @@ public class CustomLobbyManager : MonoBehaviourPunCallbacks
     [Header("What is the Next Scene?")]
     [SerializeField] private string nextSceneName = "WarmupScene";
 
+    [Header("What is the Previous Scene?")]
+    [SerializeField] private string previousSceneName = "MainMenuScene";
+
     [Header("System Menu UI")]
     public GameObject systemMenuPanel;
     public Button quitButton;
@@ -434,6 +437,17 @@ public class CustomLobbyManager : MonoBehaviourPunCallbacks
         }
 
         joinPasswordInput.ForceLabelUpdate();
+    }
+
+    public void ReturnToPreviousScene()
+    {
+        if (string.IsNullOrWhiteSpace(previousSceneName))
+        {
+            Debug.LogWarning("이전 씬 이름이 설정되지 않았습니다.");
+            return;
+        }
+
+        SceneManager.LoadScene(previousSceneName);
     }
 
     public void ClosePasswordPanel()

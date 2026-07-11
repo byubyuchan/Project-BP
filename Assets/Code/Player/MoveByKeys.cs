@@ -639,13 +639,18 @@ namespace Photon.Pun.UtilityScripts
             if (currentItem != null)
             {
                 Debug.Log($"<color=cyan>[아이템 획득]</color> {itemName}!");
-                // 여기서 UI 아이콘(currentItem.itemIcon) 등을 업데이트하면 됩니다.
+                // 여기서 UI 아이콘(currentItem.itemIcon) 등을 업데이트하면 됩니다. (현재 사용 제한)
+                //if (ItemSlotUI.Instance != null)
+                //{
+                //    ItemSlotUI.Instance.SetItem(currentItem.itemIcon);
+                //}
 
-                if (ItemSlotUI.Instance != null)
+                if (AudioManager.instance != null)
                 {
-                    ItemSlotUI.Instance.SetItem(currentItem.itemIcon);
+                    AudioManager.instance.PlaySFX("GetItem", transform.position);
                 }
-                AudioManager.instance.PlaySFX("GetItem", this.transform.position);
+
+                OnUseItem();
             }
             else
             {

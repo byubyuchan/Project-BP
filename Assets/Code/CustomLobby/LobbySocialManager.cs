@@ -28,25 +28,27 @@ public class LobbySocialManager : MonoBehaviour, IChatClientListener
 
     private void Start()
     {
-        if (!PhotonNetwork.NickName.Contains("#"))
-        {
-            string uniquePUNId = PhotonNetwork.LocalPlayer?.UserId;
+        // 닉네임 중복 방지처리로 인한 태그 삭제 (게임 규모가 크지 않기 때문) 
 
-            int hash = 0;
+        //if (!PhotonNetwork.NickName.Contains("#"))
+        //{
+        //    string uniquePUNId = PhotonNetwork.LocalPlayer?.UserId;
 
-            if (!string.IsNullOrEmpty(uniquePUNId))
-            {
-                hash = Mathf.Abs(uniquePUNId.GetHashCode());
-            }
-            else
-            {
-                hash = Random.Range(0, 10000);
-            }
+        //    int hash = 0;
 
-            string tagId = (hash % 10000).ToString("D4");
+        //    if (!string.IsNullOrEmpty(uniquePUNId))
+        //    {
+        //        hash = Mathf.Abs(uniquePUNId.GetHashCode());
+        //    }
+        //    else
+        //    {
+        //        hash = Random.Range(0, 10000);
+        //    }
 
-            PhotonNetwork.NickName = PhotonNetwork.NickName + "#" + tagId;
-        }
+        //    string tagId = (hash % 10000).ToString("D4");
+
+        //    PhotonNetwork.NickName = PhotonNetwork.NickName + "#" + tagId;
+        //}
 
         myChatUserId = PhotonNetwork.NickName;
 

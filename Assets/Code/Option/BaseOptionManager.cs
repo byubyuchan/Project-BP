@@ -1,15 +1,18 @@
-using TMPro;
+﻿using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
 public abstract class BaseOptionManager : MonoBehaviour
 {
+    // (추가) ESC 입력에서 시스템 메뉴보다 먼저 처리할 현재 활성 옵션 패널을 저장한다.
+    public static BaseOptionManager ActiveInstance { get; private set; }
+
     [Header("Panel Control")]
     public GameObject optionPanel;
     public Button closeButton;
 
     [Header("Tabs and Pages")]
-    public Button[] tabButtons; // 0: Graphics, 1: Control, 2: Crosshair
+    public Button[] tabButtons; // (변경) 0: 그래픽, 1: 조작, 2: 조준선
     public GameObject[] pages;
 
     [Header("Common Graphics Settings")]
@@ -40,7 +43,7 @@ public abstract class BaseOptionManager : MonoBehaviour
         {
             for (int i = 0; i < tabButtons.Length; i++)
             {
-                // C# 클로저(Closure) 문제 방지를 위해 i값을 지역 변수로 복사
+                // (변경) C# 클로저 문제를 방지하기 위해 반복문의 인덱스를 지역 변수로 복사한다.
                 int index = i;
                 tabButtons[i].onClick.AddListener(() => AttemptShowPage(index));
             }
@@ -78,6 +81,9 @@ public abstract class BaseOptionManager : MonoBehaviour
             if (!isMobile && !visibility.showOnPC) return;
         }
 
+        // 현재 플랫폼의 옵션 패널 하나만 ESC 스택에 등록한다.
+        ActiveInstance = this;
+
         if (UIManager.Instance != null)
             UIManager.Instance.ShowPanel(optionPanel, AttemptCloseOptionPanel);
         else
@@ -88,7 +94,43 @@ public abstract class BaseOptionManager : MonoBehaviour
 
     public void CloseOptionPanel()
     {
+        // 옵션 배경과 함께 그래픽, 컨트롤, 조준선 등 모든 하위 페이지를 종료한다.
+        if (pages != null)
+        {
+            foreach (GameObject page in pages)
+            {
+                if (page != null) page.SetActive(false);
+            }
+        }
+
+        if (unsavedWarningPanel != null) unsavedWarningPanel.SetActive(false);
+        pendingAction = null;
+
+        // 옵션 패널을 닫는 즉시 ESC 스택에서도 제거한다.
+        if (UIManager.Instance != null) UIManager.Instance.UnregisterPanel(optionPanel);
+
         optionPanel.SetActive(false);
+
+        // 현재 옵션이 실제로 닫힌 뒤에만 최상위 모달 참조를 해제한다.
+        if (ActiveInstance == this) ActiveInstance = null;
+    }
+
+    // ESC 입력이 활성 옵션 패널과 미저장 경고창을 우선 처리하게 한다.
+    public void HandleEscape()
+    {
+        if (unsavedWarningPanel != null && unsavedWarningPanel.activeInHierarchy)
+        {
+            OnPopupCancel();
+            return;
+        }
+
+        AttemptCloseOptionPanel();
+    }
+
+    // 하위 페이지 상태와 관계없이 옵션 패널 자체가 켜져 있을 때만 열린 것으로 판단한다.
+    public bool IsOptionPanelOpen()
+    {
+        return optionPanel != null && optionPanel.activeSelf;
     }
 
     public void ShowPage(int pageIndex)

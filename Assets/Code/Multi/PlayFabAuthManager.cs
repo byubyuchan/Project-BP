@@ -12,6 +12,8 @@ public class PlayFabAuthManager : MonoBehaviour
     public Action OnLoginSuccessNewUser;
     public Action<string> OnLoginFailedEvent;
     public Action OnNicknameSetSuccess;
+    // (추가) 닉네임 저장 실패를 로그인 실패와 구분해서 UI에 전달한다.
+    public Action<string> OnNicknameSetFailed;
 
     private void Awake()
     {
@@ -74,9 +76,20 @@ public class PlayFabAuthManager : MonoBehaviour
         {
             PhotonNetwork.NickName = result.DisplayName;
             OnNicknameSetSuccess?.Invoke(); // 닉네임 저장 성공 신호
-        }, OnLoginFailure);
+        }, OnNicknameSetFailure);
     }
+    private void OnNicknameSetFailure(PlayFabError error)
+    {
+        Debug.LogError($"<color=red>[PlayFab 닉네임 설정 오류]</color> {error.GenerateErrorReport()}");
 
+        if (error.Error == PlayFabErrorCode.NameNotAvailable)
+        {
+            OnNicknameSetFailed?.Invoke("이미 사용 중인 닉네임입니다. 다른 닉네임을 입력해 주세요.");
+            return;
+        }
+
+        OnNicknameSetFailed?.Invoke("닉네임 저장에 실패했습니다. 잠시 후 다시 시도해 주세요.");
+    }
     private void OnLoginFailure(PlayFabError error)
     {
         Debug.LogError($"<color=red>[PlayFab 에러]</color> {error.GenerateErrorReport()}");

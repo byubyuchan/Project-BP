@@ -22,6 +22,11 @@ public class TitleController : MonoBehaviour
     public string nextSceneName = "Lobby";
 
     private bool isWaitingForInput = true;
+    // 기존 계정이어도 게스트 로그인이라면 닉네임 입력 화면을 거치게 한다.
+    private bool isGuestLogin = false;
+
+    private const int MinNicknameLength = 3;
+    private const int MaxNicknameLength = 25;
 
     private void Start()
     {
@@ -34,9 +39,10 @@ public class TitleController : MonoBehaviour
         if (PlayFabAuthManager.Instance != null)
         {
             PlayFabAuthManager.Instance.OnLoginSuccessNewUser += ShowNicknamePanel;
-            PlayFabAuthManager.Instance.OnLoginSuccessExistingUser += LoadNextScene;
+            PlayFabAuthManager.Instance.OnLoginSuccessExistingUser += HandleExistingUserLogin;
             PlayFabAuthManager.Instance.OnNicknameSetSuccess += LoadNextScene;
             PlayFabAuthManager.Instance.OnLoginFailedEvent += ShowPopup;
+            PlayFabAuthManager.Instance.OnNicknameSetFailed += HandleNicknameSetFailure;
         }
     }
 
@@ -45,9 +51,10 @@ public class TitleController : MonoBehaviour
         if (PlayFabAuthManager.Instance != null)
         {
             PlayFabAuthManager.Instance.OnLoginSuccessNewUser -= ShowNicknamePanel;
-            PlayFabAuthManager.Instance.OnLoginSuccessExistingUser -= LoadNextScene;
+            PlayFabAuthManager.Instance.OnLoginSuccessExistingUser -= HandleExistingUserLogin;
             PlayFabAuthManager.Instance.OnNicknameSetSuccess -= LoadNextScene;
             PlayFabAuthManager.Instance.OnLoginFailedEvent -= ShowPopup;
+            PlayFabAuthManager.Instance.OnNicknameSetFailed -= HandleNicknameSetFailure;
         }
     }
 
@@ -86,11 +93,19 @@ public class TitleController : MonoBehaviour
     public void OnClosePopupClicked()
     {
         if (popupPanel != null) popupPanel.SetActive(false);
+
+        if (nicknamePanel != null && nicknamePanel.activeInHierarchy && nicknameInput != null)
+        {
+            nicknameInput.Select();
+            nicknameInput.ActivateInputField();
+        }
     }
 
     public void OnGuestLoginButtonClicked()
     {
-        // 1. 플레이팹에 게스트 로그인을 요청한다!
+        // 기존에 사용한 기기의 게스트 계정이어도 이번 접속에서 닉네임을 다시 입력받는다.
+        isGuestLogin = true;
+
         if (PlayFabAuthManager.Instance != null)
         {
             PlayFabAuthManager.Instance.LoginWithEditor();
@@ -100,6 +115,8 @@ public class TitleController : MonoBehaviour
     // 구글 등 정식 로그인 버튼용 (현재는 게스트와 동일하게 처리하거나 추후 구글 플러그인 연동부)
     public void OnLoginButtonClicked()
     {
+        isGuestLogin = false;
+
         if (PlayFabAuthManager.Instance != null)
         {
             PlayFabAuthManager.Instance.LoginWithEditor();
@@ -108,17 +125,36 @@ public class TitleController : MonoBehaviour
 
     public void OnNicknameSubmit()
     {
-        if (string.IsNullOrWhiteSpace(nicknameInput.text))
+        // 공백을 제거한 실제 닉네임을 기준으로 길이를 검사한다.
+        if (nicknameInput == null)
         {
-            ShowPopup("Please enter a nickname");
+            ShowPopup("닉네임 입력창을 찾지 못했습니다.");
+            return;
+        }
+
+        string nickname = nicknameInput.text.Trim();
+
+        // 2글자 이하의 닉네임은 서버 요청 전에 차단하고 입력 화면을 유지한다.
+        if (nickname.Length < MinNicknameLength)
+        {
+            ShowPopup($"닉네임은 최소 {MinNicknameLength}글자 이상 입력해 주세요.");
             nicknameInput.Select();
             return;
         }
 
-        // 플레이팹 DB에 내 이름 변경 요청!
+        // PlayFab의 최대 표시 이름 길이를 초과한 닉네임도 서버 요청 전에 차단한다.
+        if (nickname.Length > MaxNicknameLength)
+        {
+            ShowPopup($"닉네임은 최대 {MaxNicknameLength}글자까지 입력할 수 있습니다.");
+            nicknameInput.Select();
+            return;
+        }
+
+        // (변경) 검사와 공백 제거가 끝난 닉네임만 PlayFab에 저장 요청한다.
+        nicknameInput.text = nickname;
         if (PlayFabAuthManager.Instance != null)
         {
-            PlayFabAuthManager.Instance.SetPlayerNickname(nicknameInput.text);
+            PlayFabAuthManager.Instance.SetPlayerNickname(nickname);
         }
     }
 
@@ -127,6 +163,24 @@ public class TitleController : MonoBehaviour
         if (loginButtonGroup != null) loginButtonGroup.SetActive(false);
         if (nicknamePanel != null) nicknamePanel.SetActive(true);
         if (nicknameInput != null) nicknameInput.Select();
+    }
+
+    private void HandleExistingUserLogin()
+    {
+        if (isGuestLogin)
+        {
+            ShowNicknamePanel();
+            return;
+        }
+
+        LoadNextScene();
+    }
+
+    // 닉네임 저장에 실패해도 씬을 이동하지 않고 입력 화면을 유지한다.
+    private void HandleNicknameSetFailure(string message)
+    {
+        ShowPopup(message);
+        if (nicknamePanel != null) nicknamePanel.SetActive(true);
     }
 
     private void LoadNextScene()
