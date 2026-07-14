@@ -21,6 +21,7 @@ public class WarmupManager : BaseGameManager
     public Button kickButton;
 
     [Header("Room Settings UI")]
+    public GameObject roomSettingButton;
     public GameObject roomSettingsPanel;
     public TMP_InputField settingsNameInput;
     public TMP_Dropdown settingsModeDropdown;
@@ -79,7 +80,8 @@ public class WarmupManager : BaseGameManager
         }
         else
         {
-            startButton.gameObject.SetActive(false);
+            if (startButton) startButton.gameObject.SetActive(false);
+            if(roomSettingButton) roomSettingButton.gameObject.SetActive(false);
         }
 
         promoteButton.onClick.AddListener(DelegateHost);
@@ -364,7 +366,7 @@ public class WarmupManager : BaseGameManager
 
     public void CloseRoomSettingsPanel()
     {
-        roomSettingsPanel.SetActive(false);
+        if (roomSettingsPanel) roomSettingsPanel.SetActive(false);
     }
 
     public void ApplyRoomSettings()

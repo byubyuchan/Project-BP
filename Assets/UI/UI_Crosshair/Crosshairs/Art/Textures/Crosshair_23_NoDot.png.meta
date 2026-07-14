@@ -1,12 +1,5 @@
 fileFormatVersion: 2
-guid: e7e80d39e3e102147a3be13caa7cd3d7
-AssetOrigin:
-  serializedVersion: 1
-  productId: 216732
-  packageName: Crosshairs | 25+ Free Crosshairs Pack
-  packageVersion: 1.1.1
-  assetPath: Assets/OccaSoftware/Crosshairs/Art/Textures/Crosshair_23.png
-  uploadId: 586051
+guid: c7de4c8591947014fb76366710588b16
 TextureImporter:
   internalIDToNameTable: []
   externalObjects: {}
@@ -42,7 +35,7 @@ TextureImporter:
   textureSettings:
     serializedVersion: 2
     filterMode: 1
-    aniso: 2
+    aniso: 1
     mipBias: 0
     wrapU: 1
     wrapV: 1
@@ -69,14 +62,14 @@ TextureImporter:
   maxTextureSizeSet: 0
   compressionQualitySet: 0
   textureFormatSet: 0
-  ignorePngGamma: 1
+  ignorePngGamma: 0
   applyGammaDecoding: 0
   swizzle: 50462976
-  cookieLightType: 1
+  cookieLightType: 0
   platformSettings:
   - serializedVersion: 4
     buildTarget: DefaultTexturePlatform
-    maxTextureSize: 512
+    maxTextureSize: 2048
     resizeAlgorithm: 0
     textureFormat: -1
     textureCompression: 1
@@ -89,20 +82,7 @@ TextureImporter:
     forceMaximumCompressionQuality_BC6H_BC7: 0
   - serializedVersion: 4
     buildTarget: Standalone
-    maxTextureSize: 512
-    resizeAlgorithm: 0
-    textureFormat: -1
-    textureCompression: 1
-    compressionQuality: 50
-    crunchedCompression: 0
-    allowsAlphaSplitting: 0
-    overridden: 0
-    ignorePlatformSupport: 0
-    androidETC2FallbackOverride: 0
-    forceMaximumCompressionQuality_BC6H_BC7: 0
-  - serializedVersion: 4
-    buildTarget: iOS
-    maxTextureSize: 8192
+    maxTextureSize: 2048
     resizeAlgorithm: 0
     textureFormat: -1
     textureCompression: 1
@@ -115,20 +95,7 @@ TextureImporter:
     forceMaximumCompressionQuality_BC6H_BC7: 0
   - serializedVersion: 4
     buildTarget: Android
-    maxTextureSize: 8192
-    resizeAlgorithm: 0
-    textureFormat: -1
-    textureCompression: 1
-    compressionQuality: 50
-    crunchedCompression: 0
-    allowsAlphaSplitting: 0
-    overridden: 0
-    ignorePlatformSupport: 0
-    androidETC2FallbackOverride: 0
-    forceMaximumCompressionQuality_BC6H_BC7: 0
-  - serializedVersion: 4
-    buildTarget: WindowsStoreApps
-    maxTextureSize: 8192
+    maxTextureSize: 2048
     resizeAlgorithm: 0
     textureFormat: -1
     textureCompression: 1
@@ -141,7 +108,7 @@ TextureImporter:
     forceMaximumCompressionQuality_BC6H_BC7: 0
   - serializedVersion: 4
     buildTarget: WebGL
-    maxTextureSize: 512
+    maxTextureSize: 2048
     resizeAlgorithm: 0
     textureFormat: -1
     textureCompression: 1
@@ -156,7 +123,7 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: Crosshair_23_0
+      name: Crosshair_23_NoDot_0
       rect:
         serializedVersion: 2
         x: 0
@@ -171,8 +138,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 060b8872151e12249a5e40a38327eeb1
-      internalID: -443689732
+      spriteID: a5aca6351cc62e44c924c293cf81b90a
+      internalID: 1608023379
       vertices: []
       indices: 
       edges: []
@@ -181,7 +148,7 @@ TextureImporter:
     customData: 
     physicsShape: []
     bones: []
-    spriteID: a8dbae76ae2ecd44b8ca660efda0a670
+    spriteID: 960f2e573d3b27245ad45f18a42a4240
     internalID: 0
     vertices: []
     indices: 
@@ -193,7 +160,7 @@ TextureImporter:
       - key: SpriteEditor.SliceSettings
         value: '{"sliceOnImport":false,"gridCellCount":{"x":1.0,"y":1.0},"gridSpriteSize":{"x":64.0,"y":64.0},"gridSpriteOffset":{"x":0.0,"y":0.0},"gridSpritePadding":{"x":0.0,"y":0.0},"pivot":{"x":0.5,"y":0.5},"pivotPixels":{"x":0.0,"y":0.0},"autoSlicingMethod":0,"spriteAlignment":0,"pivotUnitMode":0,"slicingType":0,"keepEmptyRects":false,"isAlternate":false}'
     nameFileIdTable:
-      Crosshair_23_0: -443689732
+      Crosshair_23_NoDot_0: 1608023379
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

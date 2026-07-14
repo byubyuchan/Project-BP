@@ -1267,6 +1267,18 @@ PrefabInstance:
       propertyPath: m_IsActive
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 114204224268582166, guid: 05f32eddd3e41fd4597ada617b785928, type: 3}
+      propertyPath: m_Transition
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 114204224268582166, guid: 05f32eddd3e41fd4597ada617b785928, type: 3}
+      propertyPath: m_Interactable
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 114204224268582166, guid: 05f32eddd3e41fd4597ada617b785928, type: 3}
+      propertyPath: m_Colors.m_ColorMultiplier
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 114344768413473294, guid: 05f32eddd3e41fd4597ada617b785928, type: 3}
       propertyPath: m_ControlPath
       value: <Gamepad>/buttonSouth
@@ -1294,22 +1306,22 @@ PrefabInstance:
     - target: {fileID: 114826362001716654, guid: 05f32eddd3e41fd4597ada617b785928, type: 3}
       propertyPath: m_Sprite
       value: 
-      objectReference: {fileID: -236251539, guid: 001c977dff995c5418427c43fe18213d, type: 3}
+      objectReference: {fileID: 21300000, guid: 27110310ddd82bb4aa9205da62031bca, type: 3}
     - target: {fileID: 114826362001716654, guid: 05f32eddd3e41fd4597ada617b785928, type: 3}
       propertyPath: m_Color.a
       value: 0.39215687
       objectReference: {fileID: 0}
     - target: {fileID: 114826362001716654, guid: 05f32eddd3e41fd4597ada617b785928, type: 3}
       propertyPath: m_Color.b
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 114826362001716654, guid: 05f32eddd3e41fd4597ada617b785928, type: 3}
       propertyPath: m_Color.g
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 114826362001716654, guid: 05f32eddd3e41fd4597ada617b785928, type: 3}
       propertyPath: m_Color.r
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 224771122883764374, guid: 05f32eddd3e41fd4597ada617b785928, type: 3}
       propertyPath: m_Pivot.x
@@ -2686,7 +2698,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dd9f079e384e69c4f850b0044d8dbc4e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::DebugSceneManager
-  playerPrefabName: Player_FlameShot
+  playerPrefabName: Player_FireBall
   spawnPoint: {fileID: 1790634272}
   txt: {fileID: 596935686}
   currentPlayer: {fileID: 0}
@@ -4848,8 +4860,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5148fa6625864944fac328f2c0937c17, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::DynamicFloatingJoystick
-  backgroundRing: {fileID: 0}
-  handle: {fileID: 0}
+  backgroundRing: {fileID: 1805159338}
+  handle: {fileID: 1319528817}
   joystickRadius: 100
   m_ControlPath: <Gamepad>/leftStick
 --- !u!114 &771256540
@@ -5292,6 +5304,18 @@ PrefabInstance:
       propertyPath: m_IsActive
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 114204224268582166, guid: 05f32eddd3e41fd4597ada617b785928, type: 3}
+      propertyPath: m_Transition
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 114204224268582166, guid: 05f32eddd3e41fd4597ada617b785928, type: 3}
+      propertyPath: m_Interactable
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 114204224268582166, guid: 05f32eddd3e41fd4597ada617b785928, type: 3}
+      propertyPath: m_Colors.m_ColorMultiplier
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 114344768413473294, guid: 05f32eddd3e41fd4597ada617b785928, type: 3}
       propertyPath: m_ControlPath
       value: <Gamepad>/rightTrigger
@@ -5315,10 +5339,22 @@ PrefabInstance:
     - target: {fileID: 114826362001716654, guid: 05f32eddd3e41fd4597ada617b785928, type: 3}
       propertyPath: m_Sprite
       value: 
-      objectReference: {fileID: -236251539, guid: 001c977dff995c5418427c43fe18213d, type: 3}
+      objectReference: {fileID: 21300000, guid: 27110310ddd82bb4aa9205da62031bca, type: 3}
     - target: {fileID: 114826362001716654, guid: 05f32eddd3e41fd4597ada617b785928, type: 3}
       propertyPath: m_Color.a
       value: 0.39215687
+      objectReference: {fileID: 0}
+    - target: {fileID: 114826362001716654, guid: 05f32eddd3e41fd4597ada617b785928, type: 3}
+      propertyPath: m_Color.b
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 114826362001716654, guid: 05f32eddd3e41fd4597ada617b785928, type: 3}
+      propertyPath: m_Color.g
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 114826362001716654, guid: 05f32eddd3e41fd4597ada617b785928, type: 3}
+      propertyPath: m_Color.r
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 114826362001716654, guid: 05f32eddd3e41fd4597ada617b785928, type: 3}
       propertyPath: m_RaycastTarget
@@ -5935,6 +5971,18 @@ PrefabInstance:
       propertyPath: m_IsActive
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 114204224268582166, guid: 05f32eddd3e41fd4597ada617b785928, type: 3}
+      propertyPath: m_Transition
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 114204224268582166, guid: 05f32eddd3e41fd4597ada617b785928, type: 3}
+      propertyPath: m_Interactable
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 114204224268582166, guid: 05f32eddd3e41fd4597ada617b785928, type: 3}
+      propertyPath: m_Colors.m_ColorMultiplier
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 114344768413473294, guid: 05f32eddd3e41fd4597ada617b785928, type: 3}
       propertyPath: m_ControlPath
       value: <Gamepad>/rightTrigger
@@ -5958,10 +6006,22 @@ PrefabInstance:
     - target: {fileID: 114826362001716654, guid: 05f32eddd3e41fd4597ada617b785928, type: 3}
       propertyPath: m_Sprite
       value: 
-      objectReference: {fileID: -236251539, guid: 001c977dff995c5418427c43fe18213d, type: 3}
+      objectReference: {fileID: 21300000, guid: 27110310ddd82bb4aa9205da62031bca, type: 3}
     - target: {fileID: 114826362001716654, guid: 05f32eddd3e41fd4597ada617b785928, type: 3}
       propertyPath: m_Color.a
       value: 0.39215687
+      objectReference: {fileID: 0}
+    - target: {fileID: 114826362001716654, guid: 05f32eddd3e41fd4597ada617b785928, type: 3}
+      propertyPath: m_Color.b
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 114826362001716654, guid: 05f32eddd3e41fd4597ada617b785928, type: 3}
+      propertyPath: m_Color.g
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 114826362001716654, guid: 05f32eddd3e41fd4597ada617b785928, type: 3}
+      propertyPath: m_Color.r
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 114826362001716654, guid: 05f32eddd3e41fd4597ada617b785928, type: 3}
       propertyPath: m_RaycastTarget
@@ -7701,6 +7761,7 @@ MonoBehaviour:
   targetNameText: {fileID: 1930934841}
   promoteButton: {fileID: 1341088554}
   kickButton: {fileID: 625580643}
+  roomSettingButton: {fileID: 0}
   roomSettingsPanel: {fileID: 0}
   settingsNameInput: {fileID: 0}
   settingsModeDropdown: {fileID: 0}
@@ -8930,6 +8991,18 @@ PrefabInstance:
       propertyPath: m_IsActive
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 114204224268582166, guid: 05f32eddd3e41fd4597ada617b785928, type: 3}
+      propertyPath: m_Transition
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 114204224268582166, guid: 05f32eddd3e41fd4597ada617b785928, type: 3}
+      propertyPath: m_Interactable
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 114204224268582166, guid: 05f32eddd3e41fd4597ada617b785928, type: 3}
+      propertyPath: m_Colors.m_ColorMultiplier
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 114344768413473294, guid: 05f32eddd3e41fd4597ada617b785928, type: 3}
       propertyPath: m_ControlPath
       value: <Gamepad>/rightTrigger
@@ -8953,10 +9026,22 @@ PrefabInstance:
     - target: {fileID: 114826362001716654, guid: 05f32eddd3e41fd4597ada617b785928, type: 3}
       propertyPath: m_Sprite
       value: 
-      objectReference: {fileID: -236251539, guid: 001c977dff995c5418427c43fe18213d, type: 3}
+      objectReference: {fileID: 21300000, guid: 27110310ddd82bb4aa9205da62031bca, type: 3}
     - target: {fileID: 114826362001716654, guid: 05f32eddd3e41fd4597ada617b785928, type: 3}
       propertyPath: m_Color.a
       value: 0.39215687
+      objectReference: {fileID: 0}
+    - target: {fileID: 114826362001716654, guid: 05f32eddd3e41fd4597ada617b785928, type: 3}
+      propertyPath: m_Color.b
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 114826362001716654, guid: 05f32eddd3e41fd4597ada617b785928, type: 3}
+      propertyPath: m_Color.g
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 114826362001716654, guid: 05f32eddd3e41fd4597ada617b785928, type: 3}
+      propertyPath: m_Color.r
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 114826362001716654, guid: 05f32eddd3e41fd4597ada617b785928, type: 3}
       propertyPath: m_RaycastTarget
@@ -9676,6 +9761,18 @@ PrefabInstance:
       propertyPath: m_IsActive
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 114204224268582166, guid: 05f32eddd3e41fd4597ada617b785928, type: 3}
+      propertyPath: m_Transition
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 114204224268582166, guid: 05f32eddd3e41fd4597ada617b785928, type: 3}
+      propertyPath: m_Interactable
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 114204224268582166, guid: 05f32eddd3e41fd4597ada617b785928, type: 3}
+      propertyPath: m_Colors.m_ColorMultiplier
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 114344768413473294, guid: 05f32eddd3e41fd4597ada617b785928, type: 3}
       propertyPath: m_ControlPath
       value: <Gamepad>/rightShoulder
@@ -9699,10 +9796,22 @@ PrefabInstance:
     - target: {fileID: 114826362001716654, guid: 05f32eddd3e41fd4597ada617b785928, type: 3}
       propertyPath: m_Sprite
       value: 
-      objectReference: {fileID: -236251539, guid: 001c977dff995c5418427c43fe18213d, type: 3}
+      objectReference: {fileID: 21300000, guid: 27110310ddd82bb4aa9205da62031bca, type: 3}
     - target: {fileID: 114826362001716654, guid: 05f32eddd3e41fd4597ada617b785928, type: 3}
       propertyPath: m_Color.a
       value: 0.39215687
+      objectReference: {fileID: 0}
+    - target: {fileID: 114826362001716654, guid: 05f32eddd3e41fd4597ada617b785928, type: 3}
+      propertyPath: m_Color.b
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 114826362001716654, guid: 05f32eddd3e41fd4597ada617b785928, type: 3}
+      propertyPath: m_Color.g
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 114826362001716654, guid: 05f32eddd3e41fd4597ada617b785928, type: 3}
+      propertyPath: m_Color.r
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 224771122883764374, guid: 05f32eddd3e41fd4597ada617b785928, type: 3}
       propertyPath: m_Pivot.x
@@ -9856,6 +9965,18 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1728513650105062, guid: 05f32eddd3e41fd4597ada617b785928, type: 3}
       propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 114204224268582166, guid: 05f32eddd3e41fd4597ada617b785928, type: 3}
+      propertyPath: m_Transition
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 114204224268582166, guid: 05f32eddd3e41fd4597ada617b785928, type: 3}
+      propertyPath: m_Interactable
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 114204224268582166, guid: 05f32eddd3e41fd4597ada617b785928, type: 3}
+      propertyPath: m_Colors.m_ColorMultiplier
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 114204224268582166, guid: 05f32eddd3e41fd4597ada617b785928, type: 3}

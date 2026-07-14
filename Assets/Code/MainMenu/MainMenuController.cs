@@ -11,6 +11,7 @@ public class MainMenuController : MonoBehaviourPunCallbacks
     [Header("Scene Settings")]
     public string customGameSceneName = "CustomLobbyScene";
     public string warmupSceneName = "WarmupScene";
+    public string practiceSceneName = "PraticeScene";
 
     [Header("Popup UI")]
     public GameObject popupPanel;
@@ -56,6 +57,17 @@ public class MainMenuController : MonoBehaviourPunCallbacks
         {
             // 커스텀 로비 씬으로 이동 (거기서 CustomLobbyManager가 알아서 작동함)
             SceneManager.LoadScene(customGameSceneName);
+        }
+        else Debug.LogWarning("서버 연결 중입니다...");
+
+    }
+
+    public void OnPractiveSceneClicked()
+    {
+        if (PhotonNetwork.IsConnectedAndReady)
+        {
+            // 커스텀 로비 씬으로 이동 (거기서 CustomLobbyManager가 알아서 작동함)
+            SceneManager.LoadScene(practiceSceneName);
         }
         else Debug.LogWarning("서버 연결 중입니다...");
 

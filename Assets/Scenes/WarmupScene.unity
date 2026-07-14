@@ -349,10 +349,22 @@ PrefabInstance:
     - target: {fileID: 114826362001716654, guid: 05f32eddd3e41fd4597ada617b785928, type: 3}
       propertyPath: m_Sprite
       value: 
-      objectReference: {fileID: 21300000, guid: 6eabd9d5d72792744b19e95b18d60044, type: 3}
+      objectReference: {fileID: 21300000, guid: 27110310ddd82bb4aa9205da62031bca, type: 3}
     - target: {fileID: 114826362001716654, guid: 05f32eddd3e41fd4597ada617b785928, type: 3}
       propertyPath: m_Color.a
       value: 0.39215687
+      objectReference: {fileID: 0}
+    - target: {fileID: 114826362001716654, guid: 05f32eddd3e41fd4597ada617b785928, type: 3}
+      propertyPath: m_Color.b
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 114826362001716654, guid: 05f32eddd3e41fd4597ada617b785928, type: 3}
+      propertyPath: m_Color.g
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 114826362001716654, guid: 05f32eddd3e41fd4597ada617b785928, type: 3}
+      propertyPath: m_Color.r
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 114826362001716654, guid: 05f32eddd3e41fd4597ada617b785928, type: 3}
       propertyPath: m_RaycastTarget
@@ -1472,10 +1484,22 @@ PrefabInstance:
     - target: {fileID: 114826362001716654, guid: 05f32eddd3e41fd4597ada617b785928, type: 3}
       propertyPath: m_Sprite
       value: 
-      objectReference: {fileID: 21300000, guid: 6eabd9d5d72792744b19e95b18d60044, type: 3}
+      objectReference: {fileID: 21300000, guid: 27110310ddd82bb4aa9205da62031bca, type: 3}
     - target: {fileID: 114826362001716654, guid: 05f32eddd3e41fd4597ada617b785928, type: 3}
       propertyPath: m_Color.a
       value: 0.39215687
+      objectReference: {fileID: 0}
+    - target: {fileID: 114826362001716654, guid: 05f32eddd3e41fd4597ada617b785928, type: 3}
+      propertyPath: m_Color.b
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 114826362001716654, guid: 05f32eddd3e41fd4597ada617b785928, type: 3}
+      propertyPath: m_Color.g
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 114826362001716654, guid: 05f32eddd3e41fd4597ada617b785928, type: 3}
+      propertyPath: m_Color.r
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 224771122883764374, guid: 05f32eddd3e41fd4597ada617b785928, type: 3}
       propertyPath: m_Pivot.x
@@ -3436,14 +3460,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Image
   m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 1, b: 1, a: 0.392}
+  m_Color: {r: 0, g: 0, b: 0, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 10907, guid: 0000000000000000f000000000000000, type: 0}
+  m_Sprite: {fileID: 21300000, guid: 656c1d753a35b044e8ec28afb7138488, type: 3}
   m_Type: 1
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -4029,8 +4053,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5148fa6625864944fac328f2c0937c17, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::DynamicFloatingJoystick
-  backgroundRing: {fileID: 0}
-  handle: {fileID: 0}
+  backgroundRing: {fileID: 443930625}
+  handle: {fileID: 2038701785}
   joystickRadius: 100
   m_ControlPath: <Gamepad>/leftStick
 --- !u!114 &581637782
@@ -4949,14 +4973,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Image
   m_Material: {fileID: 0}
-  m_Color: {r: 0.6313726, g: 0.6313726, b: 0.6313726, a: 1}
+  m_Color: {r: 0, g: 0, b: 0, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 10907, guid: 0000000000000000f000000000000000, type: 0}
+  m_Sprite: {fileID: 21300000, guid: 31690c82e76edca4b8f67112000a183b, type: 3}
   m_Type: 1
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -6351,10 +6375,22 @@ PrefabInstance:
     - target: {fileID: 114826362001716654, guid: 05f32eddd3e41fd4597ada617b785928, type: 3}
       propertyPath: m_Sprite
       value: 
-      objectReference: {fileID: 21300000, guid: 6eabd9d5d72792744b19e95b18d60044, type: 3}
+      objectReference: {fileID: 21300000, guid: 27110310ddd82bb4aa9205da62031bca, type: 3}
     - target: {fileID: 114826362001716654, guid: 05f32eddd3e41fd4597ada617b785928, type: 3}
       propertyPath: m_Color.a
       value: 0.39215687
+      objectReference: {fileID: 0}
+    - target: {fileID: 114826362001716654, guid: 05f32eddd3e41fd4597ada617b785928, type: 3}
+      propertyPath: m_Color.b
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 114826362001716654, guid: 05f32eddd3e41fd4597ada617b785928, type: 3}
+      propertyPath: m_Color.g
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 114826362001716654, guid: 05f32eddd3e41fd4597ada617b785928, type: 3}
+      propertyPath: m_Color.r
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 114826362001716654, guid: 05f32eddd3e41fd4597ada617b785928, type: 3}
       propertyPath: m_RaycastTarget
@@ -8939,7 +8975,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6982216923629320108, guid: 0e97b30b5b3ef2d4fa745810940a4e80, type: 3}
       propertyPath: ShapeModule.m_Scale.x
-      value: 0.090183295
+      value: 0.081018
       objectReference: {fileID: 0}
     - target: {fileID: 6982216923629320108, guid: 0e97b30b5b3ef2d4fa745810940a4e80, type: 3}
       propertyPath: ShapeModule.m_Scale.y
@@ -8947,7 +8983,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6982216923629320108, guid: 0e97b30b5b3ef2d4fa745810940a4e80, type: 3}
       propertyPath: InitialModule.startSize.scalar
-      value: 0.090183295
+      value: 0.081018
       objectReference: {fileID: 0}
     - target: {fileID: 6982216923629320108, guid: 0e97b30b5b3ef2d4fa745810940a4e80, type: 3}
       propertyPath: InitialModule.startSizeY.scalar
@@ -9243,22 +9279,22 @@ PrefabInstance:
     - target: {fileID: 114826362001716654, guid: 05f32eddd3e41fd4597ada617b785928, type: 3}
       propertyPath: m_Sprite
       value: 
-      objectReference: {fileID: 21300000, guid: 6eabd9d5d72792744b19e95b18d60044, type: 3}
+      objectReference: {fileID: 21300000, guid: 27110310ddd82bb4aa9205da62031bca, type: 3}
     - target: {fileID: 114826362001716654, guid: 05f32eddd3e41fd4597ada617b785928, type: 3}
       propertyPath: m_Color.a
       value: 0.39215687
       objectReference: {fileID: 0}
     - target: {fileID: 114826362001716654, guid: 05f32eddd3e41fd4597ada617b785928, type: 3}
       propertyPath: m_Color.b
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 114826362001716654, guid: 05f32eddd3e41fd4597ada617b785928, type: 3}
       propertyPath: m_Color.g
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 114826362001716654, guid: 05f32eddd3e41fd4597ada617b785928, type: 3}
       propertyPath: m_Color.r
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 224771122883764374, guid: 05f32eddd3e41fd4597ada617b785928, type: 3}
       propertyPath: m_Pivot.x
@@ -9596,7 +9632,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6224271007878116663, guid: 6be92596c1a7ee04893f5af9b1a33bf3, type: 3}
       propertyPath: ShapeModule.m_Scale.x
-      value: 0.090183295
+      value: 0.081018
       objectReference: {fileID: 0}
     - target: {fileID: 6224271007878116663, guid: 6be92596c1a7ee04893f5af9b1a33bf3, type: 3}
       propertyPath: ShapeModule.m_Scale.y
@@ -9604,7 +9640,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6224271007878116663, guid: 6be92596c1a7ee04893f5af9b1a33bf3, type: 3}
       propertyPath: InitialModule.startSize.scalar
-      value: 0.090183295
+      value: 0.081018
       objectReference: {fileID: 0}
     - target: {fileID: 6224271007878116663, guid: 6be92596c1a7ee04893f5af9b1a33bf3, type: 3}
       propertyPath: InitialModule.startSizeY.scalar
@@ -9969,6 +10005,7 @@ MonoBehaviour:
   targetNameText: {fileID: 1930934841}
   promoteButton: {fileID: 1341088554}
   kickButton: {fileID: 625580643}
+  roomSettingButton: {fileID: 1239658443}
   roomSettingsPanel: {fileID: 692475468}
   settingsNameInput: {fileID: 2077440731}
   settingsModeDropdown: {fileID: 84833623}
@@ -12076,7 +12113,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4928745586645793543, guid: ebe327400de958040a5082d7a1a2270f, type: 3}
       propertyPath: ShapeModule.m_Scale.x
-      value: 0.090183295
+      value: 0.081018
       objectReference: {fileID: 0}
     - target: {fileID: 4928745586645793543, guid: ebe327400de958040a5082d7a1a2270f, type: 3}
       propertyPath: ShapeModule.m_Scale.y
@@ -12084,7 +12121,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4928745586645793543, guid: ebe327400de958040a5082d7a1a2270f, type: 3}
       propertyPath: InitialModule.startSize.scalar
-      value: 0.090183295
+      value: 0.081018
       objectReference: {fileID: 0}
     - target: {fileID: 4928745586645793543, guid: ebe327400de958040a5082d7a1a2270f, type: 3}
       propertyPath: InitialModule.startSizeY.scalar
@@ -12237,7 +12274,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5271114206097984850, guid: 8feb66f6d5381af4c9724178dfb3780f, type: 3}
       propertyPath: ShapeModule.m_Scale.x
-      value: 0.090183295
+      value: 0.081018
       objectReference: {fileID: 0}
     - target: {fileID: 5271114206097984850, guid: 8feb66f6d5381af4c9724178dfb3780f, type: 3}
       propertyPath: ShapeModule.m_Scale.y
@@ -12245,7 +12282,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5271114206097984850, guid: 8feb66f6d5381af4c9724178dfb3780f, type: 3}
       propertyPath: InitialModule.startSize.scalar
-      value: 0.090183295
+      value: 0.081018
       objectReference: {fileID: 0}
     - target: {fileID: 5271114206097984850, guid: 8feb66f6d5381af4c9724178dfb3780f, type: 3}
       propertyPath: InitialModule.startSizeY.scalar
@@ -17058,10 +17095,22 @@ PrefabInstance:
     - target: {fileID: 114826362001716654, guid: 05f32eddd3e41fd4597ada617b785928, type: 3}
       propertyPath: m_Sprite
       value: 
-      objectReference: {fileID: 21300000, guid: 6eabd9d5d72792744b19e95b18d60044, type: 3}
+      objectReference: {fileID: 21300000, guid: 27110310ddd82bb4aa9205da62031bca, type: 3}
     - target: {fileID: 114826362001716654, guid: 05f32eddd3e41fd4597ada617b785928, type: 3}
       propertyPath: m_Color.a
       value: 0.39215687
+      objectReference: {fileID: 0}
+    - target: {fileID: 114826362001716654, guid: 05f32eddd3e41fd4597ada617b785928, type: 3}
+      propertyPath: m_Color.b
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 114826362001716654, guid: 05f32eddd3e41fd4597ada617b785928, type: 3}
+      propertyPath: m_Color.g
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 114826362001716654, guid: 05f32eddd3e41fd4597ada617b785928, type: 3}
+      propertyPath: m_Color.r
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 114826362001716654, guid: 05f32eddd3e41fd4597ada617b785928, type: 3}
       propertyPath: m_RaycastTarget
@@ -18634,10 +18683,10 @@ PrefabInstance:
       addedObject: {fileID: 1898581868}
     - targetCorrespondingSourceObject: {fileID: 5979851889096361472, guid: e99a338ad3ae1454b9acf87429b60ea6, type: 3}
       insertIndex: -1
-      addedObject: {fileID: 1275495909}
+      addedObject: {fileID: 1210152422}
     - targetCorrespondingSourceObject: {fileID: 5979851889096361472, guid: e99a338ad3ae1454b9acf87429b60ea6, type: 3}
       insertIndex: -1
-      addedObject: {fileID: 1210152422}
+      addedObject: {fileID: 1275495909}
     - targetCorrespondingSourceObject: {fileID: 5979851889096361472, guid: e99a338ad3ae1454b9acf87429b60ea6, type: 3}
       insertIndex: -1
       addedObject: {fileID: 1239658444}

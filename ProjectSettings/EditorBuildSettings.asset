@@ -39,7 +39,7 @@ EditorBuildSettings:
     path: Assets/Scenes/BattleRoyalScene.unity
     guid: d4ebee6de6054794eb3ded33c2190765
   - enabled: 1
-    path: Assets/Scenes/DebugScene.unity
+    path: Assets/Scenes/PracticeScene.unity
     guid: 016b3163cfe9b864badb164a0d4ab4c1
   - enabled: 1
     path: Assets/Scenes/TestScene.unity
