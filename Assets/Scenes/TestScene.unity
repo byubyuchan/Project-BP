@@ -84292,12 +84292,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Touchpad
   m_LookControlPath: <Gamepad>/rightStick
-  virtualAttackButton: {fileID: 0}
-  attackButtonRect: {fileID: 0}
-  zoomInButton: {fileID: 0}
-  zoomInRect: {fileID: 0}
-  zoomOutButton: {fileID: 0}
-  zoomOutRect: {fileID: 0}
+  virtualAttackButton: {fileID: 2092942761}
+  attackButtonRect: {fileID: 2092942758}
+  zoomInButton: {fileID: 591990724}
+  zoomInRect: {fileID: 591990722}
+  zoomOutButton: {fileID: 719742948}
+  zoomOutRect: {fileID: 719742946}
   tapTimeLimit: 0.2
   tapDistanceLimit: 20
   isDragging: 0
@@ -376935,6 +376935,17 @@ MonoBehaviour:
   showOnPC: 0
   showOnMobile: 1
   hideIfGamepadConnected: 1
+--- !u!114 &2092942761 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 114344768413473294, guid: 05f32eddd3e41fd4597ada617b785928, type: 3}
+  m_PrefabInstance: {fileID: 2092942757}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2092942759}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6d54531977ecb194c95e2d3aa7a5d72a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &2093302687
 PrefabInstance:
   m_ObjectHideFlags: 0

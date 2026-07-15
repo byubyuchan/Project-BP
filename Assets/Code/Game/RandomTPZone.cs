@@ -45,6 +45,8 @@ public class RandomTPZone : MonoBehaviour
 
         if (cc != null) cc.enabled = true;
 
+        playerObj.GetComponent<PhotonView>().RPC("RPC_SizeReset", RpcTarget.All);
+
         // 사운드 매니저가 있다면 효과음 재생
         if (AudioManager.instance != null && !string.IsNullOrEmpty(teleportSFX))
         {

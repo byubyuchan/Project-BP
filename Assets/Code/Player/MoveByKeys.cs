@@ -50,6 +50,12 @@ namespace Photon.Pun.UtilityScripts
         public float attackCooldown = 0.5f;
         public float lastAttackTime;
 
+        // (추가) 지진 공격의 바닥 탐색 시작점이 캐릭터 콜라이더와 겹치지 않도록 띄우는 거리입니다.
+        private const float QuakeGroundRayPadding = 0.5f;
+
+        // (추가) 현재 캐릭터 높이 아래로 추가 탐색할 최대 거리입니다.
+        private const float QuakeGroundSearchExtraDistance = 50f;
+
         protected float originalSpeed;
         protected float horizontalInput;
         protected float verticalInput;
@@ -472,22 +478,59 @@ namespace Photon.Pun.UtilityScripts
         {
             if (!photonView.IsMine) return;
 
-            if (isGrounded)
+            if (!isGrounded) return;
+
+            // 크기 변경 직후에도 CharacterController의 월드 Bounds가 최신 크기를 반영하도록 동기화합니다.
+            Physics.SyncTransforms();
+
+            if (controller == null)
             {
-                RaycastHit hit;
+                controller = GetComponent<CharacterController>();
+            }
 
-                Vector3 rayStart = transform.position + new Vector3(0, 10f, 0);
+            if (controller == null || !controller.enabled)
+            {
+                Debug.LogWarning("[지진 공격] CharacterController가 없어 바닥을 탐색할 수 없습니다.");
+                return;
+            }
 
-                // 플레이어의 y축 10f 에서부터 아래로 50f까지 바닥 찾기
-                if (Physics.Raycast(rayStart, Vector3.down, out hit, 50f))
+            // 고정 y축 오프셋 대신 현재 스케일이 반영된 콜라이더의 최상단에서 바닥을 탐색합니다.
+            Bounds characterBounds = controller.bounds;
+            Vector3 rayStart = new Vector3(
+                characterBounds.center.x,
+                characterBounds.max.y + QuakeGroundRayPadding,
+                characterBounds.center.z
+            );
+
+            // 캐릭터가 커진 만큼 탐색 거리도 자동으로 늘어나도록 현재 콜라이더 높이를 더합니다.
+            float rayDistance = characterBounds.size.y +
+                                QuakeGroundRayPadding +
+                                QuakeGroundSearchExtraDistance;
+
+            // 자신과 다른 플레이어, NPC 및 투사체를 지면으로 오인하지 않도록 해당 레이어를 제외합니다.
+            int excludedLayers = LayerMask.GetMask("Player", "LocalPlayer", "NPC", "Projectile", "UI", "UI_3D");
+            int groundSearchMask = Physics.DefaultRaycastLayers & ~excludedLayers;
+
+            if (Physics.Raycast(
+                    rayStart,
+                    Vector3.down,
+                    out RaycastHit hit,
+                    rayDistance,
+                    groundSearchMask,
+                    QueryTriggerInteraction.Ignore))
+            {
+                // 찾은 지면의 경사에 맞춰 지진 투사체의 위치와 회전을 계산합니다.
+                Vector3 spawnPos = hit.point + (hit.normal * 0.05f);
+                Vector3 forwardOnSlope = Vector3.ProjectOnPlane(transform.forward, hit.normal).normalized;
+
+                // 극단적인 경사에서 정면 벡터가 사라질 경우 오른쪽 벡터를 보조 방향으로 사용합니다.
+                if (forwardOnSlope.sqrMagnitude < 0.0001f)
                 {
-                    // 맞은 곳이 있다면 ProjectOnPlane으로 경사면에 맞춰서 발사체 위치와 회전 계산
-                    Vector3 spawnPos = hit.point + (hit.normal * 0.05f);
-                    Vector3 forwardOnSlope = Vector3.ProjectOnPlane(transform.forward, hit.normal).normalized;
-                    Quaternion spawnRot = Quaternion.LookRotation(forwardOnSlope, hit.normal);
-
-                    PhotonNetwork.Instantiate("Projectile/" + projectile, spawnPos, spawnRot);
+                    forwardOnSlope = Vector3.ProjectOnPlane(transform.right, hit.normal).normalized;
                 }
+
+                Quaternion spawnRot = Quaternion.LookRotation(forwardOnSlope, hit.normal);
+                PhotonNetwork.Instantiate("Projectile/" + projectile, spawnPos, spawnRot);
             }
         }
 

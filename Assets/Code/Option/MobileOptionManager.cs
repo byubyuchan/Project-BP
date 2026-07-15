@@ -14,6 +14,9 @@ public class MobileOptionManager : BaseOptionManager
 
     private int savedFpsIndex;
 
+    private const int MobileParticleRaycastBudget = 64;
+
+
     protected override void InitPlatformGraphics()
     {
         if (targetFrameRateDropdown != null)
@@ -43,6 +46,8 @@ public class MobileOptionManager : BaseOptionManager
             else Application.targetFrameRate = 120;
 
             savedFpsIndex = targetFrameRateDropdown.value;
+
+            ApplyMobileParticleLimit();
         }
     }
 
@@ -95,5 +100,14 @@ public class MobileOptionManager : BaseOptionManager
     {
         PlayerPrefs.SetFloat("TouchSensitivity", value);
         PlayerPrefs.Save();
+    }
+
+    private void ApplyMobileParticleLimit()
+    {
+#if UNITY_ANDROID || UNITY_IOS
+        QualitySettings.particleRaycastBudget =
+            Mathf.Min(QualitySettings.particleRaycastBudget,
+                      MobileParticleRaycastBudget);
+#endif
     }
 }
