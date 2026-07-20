@@ -11926,16 +11926,28 @@ RectTransform:
   m_CorrespondingSourceObject: {fileID: 8618333042803219962, guid: 2b7aa58ae85055747a1867465d6e968a, type: 3}
   m_PrefabInstance: {fileID: 1351323823}
   m_PrefabAsset: {fileID: 0}
---- !u!1 &1351323825 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 4565834484345242346, guid: 2b7aa58ae85055747a1867465d6e968a, type: 3}
+--- !u!114 &1351323825 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 7014257730030017542, guid: 2b7aa58ae85055747a1867465d6e968a, type: 3}
   m_PrefabInstance: {fileID: 1351323823}
   m_PrefabAsset: {fileID: 0}
---- !u!1 &1351323826 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 3296228488060114392, guid: 2b7aa58ae85055747a1867465d6e968a, type: 3}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2ae01399a6ddbd44481cd78ae29fcfd4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::MobileOptionManager
+--- !u!114 &1351323826 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 2863579485895517683, guid: 2b7aa58ae85055747a1867465d6e968a, type: 3}
   m_PrefabInstance: {fileID: 1351323823}
   m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: be886eb0ecc31cb49ad45b5a3436a30b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::PCOptionManager
 --- !u!114 &1351323827 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 6156901019325694795, guid: 2b7aa58ae85055747a1867465d6e968a, type: 3}
@@ -16100,6 +16112,14 @@ PrefabInstance:
     m_TransformParent: {fileID: 2144224735}
     m_Modifications:
     - target: {fileID: 2652915351109633679, guid: 3be3cde6b0cfd2e4e833127fe179af7a, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Mode
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2652915351109633679, guid: 3be3cde6b0cfd2e4e833127fe179af7a, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_Mode
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2652915351109633679, guid: 3be3cde6b0cfd2e4e833127fe179af7a, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
       objectReference: {fileID: 1351323826}
@@ -16107,6 +16127,22 @@ PrefabInstance:
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_Target
       value: 
       objectReference: {fileID: 1351323825}
+    - target: {fileID: 2652915351109633679, guid: 3be3cde6b0cfd2e4e833127fe179af7a, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: OpenOptionPanel
+      objectReference: {fileID: 0}
+    - target: {fileID: 2652915351109633679, guid: 3be3cde6b0cfd2e4e833127fe179af7a, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_MethodName
+      value: OpenOptionPanel
+      objectReference: {fileID: 0}
+    - target: {fileID: 2652915351109633679, guid: 3be3cde6b0cfd2e4e833127fe179af7a, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
+      value: PCOptionManager, Assembly-CSharp
+      objectReference: {fileID: 0}
+    - target: {fileID: 2652915351109633679, guid: 3be3cde6b0cfd2e4e833127fe179af7a, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_TargetAssemblyTypeName
+      value: MobileOptionManager, Assembly-CSharp
+      objectReference: {fileID: 0}
     - target: {fileID: 4542105541614948206, guid: 3be3cde6b0cfd2e4e833127fe179af7a, type: 3}
       propertyPath: m_Pivot.x
       value: 0.5
