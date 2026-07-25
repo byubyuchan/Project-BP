@@ -36,7 +36,7 @@ public class RunPlayerSlot : BasePlayerSlot
     public void UpdateScore(int score)
     {
         if (IsEmpty) return;
-        scoreText.text = $"{score} / 300"; // 예: 달린 거리
+        scoreText.text = $"{score} / {RunGameManager.Instance.winScore}"; // 예: 달린 거리
     }
 
     public void UpdateRank(int rank)

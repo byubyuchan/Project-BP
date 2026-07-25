@@ -13,6 +13,8 @@ public class RunGameManager : BaseGameManager
     public GameObject[] goalObjects;
     public GameObject[] checkZones;
 
+    public int winScore = 100;
+
     private void Awake()
     {
         if (Instance == null) Instance = this;
@@ -137,7 +139,7 @@ public class RunGameManager : BaseGameManager
                 props[PhotonKeys.LAP] = currentLap + 1;
                 props[PhotonKeys.GOAL] = 0;
 
-                props["Score"] = currentScore + 100;
+                props["Score"] = currentScore + 50;
 
                 PhotonNetwork.LocalPlayer.SetCustomProperties(props);
 
@@ -220,7 +222,7 @@ public class RunGameManager : BaseGameManager
         if (changedProps.ContainsKey("Score"))
         {
             int currentScore = (int)changedProps["Score"];
-            if (currentScore >= 300)
+            if (currentScore >= winScore)
             {
                 OnPlayerFinished();
             }

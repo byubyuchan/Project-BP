@@ -836,7 +836,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d9c19a800d5ecfe47895c4b230ea476b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Photon.Pun.UtilityScripts.MoveByKeys_FlameShot
-  speed: 90
+  speed: 100
   jumpHeight: 25
   gravity: -200
   rotationSpeed: 10
@@ -1139,7 +1139,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d5e2780992a583d4aa57ac7e3e9e31b1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::HPController
-  Hp: 200
+  Hp: 250
   maxHp: 0
   UIprefab: {fileID: 170056, guid: 525d0c2c9acd74d4faf569562686959b, type: 3}
   respawnDelay: 3

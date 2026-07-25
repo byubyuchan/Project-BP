@@ -9448,7 +9448,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::ParticleProjectile
   speed: 0
   lifeTime: 0
-  damage: 5
+  damage: 10
   explosionRadius: 0
   explosionForce: 0
   explosionEffectIndex: 1
