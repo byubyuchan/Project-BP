@@ -11,6 +11,12 @@ using Hashtable = ExitGames.Client.Photon.Hashtable;
 
 public class WarmupManager : BaseGameManager
 {
+    // 드롭다운 표시값과 실제 이동할 게임 씬 이름을 한곳에서 관리
+    private const string RacingModeName = "레이싱 모드";
+    private const string BattleRoyalModeName = "배틀로얄 모드";
+    private const string RacingSceneName = "TestScene";
+    private const string BattleRoyalSceneName = "BattleRoyalScene";
+
     [Header("Player List UI")]
     public TextMeshProUGUI playerCountText;
 
@@ -81,7 +87,7 @@ public class WarmupManager : BaseGameManager
         else
         {
             if (startButton) startButton.gameObject.SetActive(false);
-            if(roomSettingButton) roomSettingButton.gameObject.SetActive(false);
+            if (roomSettingButton) roomSettingButton.gameObject.SetActive(false);
         }
 
         promoteButton.onClick.AddListener(DelegateHost);
@@ -226,7 +232,7 @@ public class WarmupManager : BaseGameManager
                 StopCoroutine(quickMatchCoroutine);
                 quickMatchCoroutine = null;
             }
-            // ✨ (수정) 부모의 UI 업데이트 RPC 호출
+            // 부모의 UI 업데이트 RPC 호출
             photonView.RPC("RPC_UpdateCountdownText", RpcTarget.All, "다른 플레이어를 대기 중...");
         }
     }
@@ -325,9 +331,27 @@ public class WarmupManager : BaseGameManager
     {
         if (PhotonNetwork.IsMasterClient)
         {
-            // 포톤 메시지 큐 정지 (씬 로드 중 에러 방지)
+            // 방 생성 시 저장한 모드에 따라 방장이 이동할 게임 씬을 결정
+            string targetSceneName = RacingSceneName;
+            Hashtable roomProperties = PhotonNetwork.CurrentRoom.CustomProperties;
+
+            if (roomProperties.ContainsKey("mode"))
+            {
+                string selectedMode = roomProperties["mode"].ToString();
+
+                if (selectedMode == BattleRoyalModeName)
+                {
+                    targetSceneName = BattleRoyalSceneName;
+                }
+                else if (selectedMode != RacingModeName)
+                {
+                    Debug.LogWarning($"알 수 없는 게임 모드입니다: {selectedMode}. 레이싱 모드로 시작합니다.");
+                }
+            }
+
+            // 씬을 불러오는 동안 Photon 메시지가 끼어들지 않도록 큐를 정지한 뒤 선택된 씬으로 이동
             PhotonNetwork.IsMessageQueueRunning = false;
-            PhotonNetwork.LoadLevel(nextScene);
+            PhotonNetwork.LoadLevel(targetSceneName);
         }
     }
 

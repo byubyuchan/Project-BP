@@ -28,7 +28,7 @@ public class TPZone : MonoBehaviour
         PhotonView pv = other.GetComponent<PhotonView>();
         if (pv == null || !pv.IsMine) return;
 
-        // 싱글톤 참조가 없는 게임 모드에서도 현재 게임 매니저를 찾는다.
+        // 싱글톤 유무와 관계없이 현재 씬의 게임 매니저를 기준으로 처리합니다.
         BaseGameManager manager = Object.FindFirstObjectByType<BaseGameManager>();
         if (manager == null) return;
 
@@ -41,12 +41,13 @@ public class TPZone : MonoBehaviour
                 return;
             }
 
-            // 캐릭터를 교체하기 전에 목적지 체크포인트의 진행도를 먼저 저장한다.
-            // 진행도를 먼저 갱신해야 새 캐릭터가 이후 부활 위치를 올바르게 사용한다.
-            if (RunGameManager.Instance != null &&
-                !RunGameManager.Instance.ProcessLocalPlayerPortalTransition(
-                    other.gameObject, fallbackTarget.transform))
+            RunGameManager runGameManager = manager as RunGameManager;
+
+            // 순서가 다른 포탈은 순간이동시키기 전에 차단하여 체크포인트 건너뛰기를 막습니다.
+            if (runGameManager != null &&
+                !runGameManager.IsExpectedCheckpoint(fallbackTarget.transform))
             {
+                manager.RequestTeleport(other.gameObject);
                 return;
             }
 
@@ -54,7 +55,18 @@ public class TPZone : MonoBehaviour
             fallbackRotation = fallbackTarget.transform.rotation;
             manager.TeleportCharacter(other.gameObject, fallbackPosition, fallbackRotation);
 
-            // 다음 체크포인트에 도달하면 기존 캐릭터를 제거하고 새 캐릭터로 교체한다.
+            // Transform 순간이동 결과를 물리 엔진에 즉시 반영합니다.
+            Physics.SyncTransforms();
+
+            // OnTriggerEnter 재발생에 의존하지 않고 순간이동 직후 목적지 체크포인트를 직접 기록합니다.
+            if (runGameManager != null &&
+                !runGameManager.ProcessLocalPlayerPortalTransition(
+                    other.gameObject, fallbackTarget.transform))
+            {
+                return;
+            }
+
+            //  체크포인트 기록이 끝난 뒤 기존 캐릭터를 제거하고 새 캐릭터로 교체합니다.
             if (PlayerSpawner.instance != null)
             {
                 PlayerSpawner.instance.InstantReSpawn(fallbackPosition, fallbackRotation);

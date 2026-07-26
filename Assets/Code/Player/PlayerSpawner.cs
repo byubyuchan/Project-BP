@@ -104,12 +104,20 @@ public class PlayerSpawner : MonoBehaviourPunCallbacks
 
             int remainTime = Mathf.CeilToInt(delay - elapsedTime);
 
-            manager.ShowMessageAnother($"{remainTime}");
+            // 사망 카운트다운 UI가 없는 배틀로얄 씬에서도 부활 루틴이 중단되지 않게 합니다.
+            if (manager != null && manager.messageText != null)
+            {
+                manager.ShowMessageAnother($"{remainTime}");
+            }
 
             yield return null;
         }
 
-        manager.messageText.gameObject.SetActive(false);
+        // 메시지 UI가 연결된 씬에서만 카운트다운을 숨깁니다.
+        if (manager != null && manager.messageText != null)
+        {
+            manager.messageText.gameObject.SetActive(false);
+        }
 
         if (playerPrefabs == null || playerPrefabs.Length == 0)
         {
@@ -156,16 +164,25 @@ public class PlayerSpawner : MonoBehaviourPunCallbacks
         Vector3 spawnPos = transform.position;
         Quaternion spawnRot = transform.rotation;
 
-        if (spawnZones.Length > 0)
+        BattleRoyalGameManager battleRoyalGameManager = BattleRoyalGameManager.Instance;
+
+        if (TryGetRandomSpawnZone(out Vector3 randomSpawnPosition, out Quaternion randomSpawnRotation))
         {
-            int index = Random.Range(0, spawnZones.Length);
-            spawnPos = spawnZones[index].position;
-            spawnRot = spawnZones[index].rotation;
+            spawnPos = randomSpawnPosition;
+            spawnRot = randomSpawnRotation;
         }
 
-        spawnPos.z += Random.Range(-offset, offset);
-        spawnPos.x += Random.Range(-offset, offset);
+        if (BattleRoyalGameManager.Instance == null)
+        {
+            AddRandomSpawnOffset(ref spawnPos);
+        }
+
         player = PhotonNetwork.Instantiate(selectedPrefab.name, spawnPos, spawnRot);
+
+        if (battleRoyalGameManager != null)
+        {
+            ApplyBattleRoyalSpawnProtection(player, battleRoyalGameManager.respawnInvincibleDuration);
+        }
     }
 
     public void ReSpawn()
@@ -180,26 +197,91 @@ public class PlayerSpawner : MonoBehaviourPunCallbacks
         Vector3 spawnPos = transform.position;
         Quaternion spawnRot = transform.rotation;
 
-        // 체크포인트가 있는지 확인
-        BaseGameManager gameManager = Object.FindFirstObjectByType<BaseGameManager>();
-        if (gameManager != null && gameManager.GetBestRespawnPoint(out Vector3 targetPos, out Quaternion targetRot))
+        BattleRoyalGameManager battleRoyalGameManager = BattleRoyalGameManager.Instance;
+
+        // 배틀로얄은 체크포인트를 사용하지 않고 등록된 스폰 지점 중 하나를 무작위로 선택합니다.
+        if (battleRoyalGameManager != null)
         {
-            spawnPos = targetPos;
-            spawnRot = targetRot;
+            if (TryGetRandomSpawnZone(out Vector3 battleSpawnPosition, out Quaternion battleSpawnRotation))
+            {
+                spawnPos = battleSpawnPosition;
+                spawnRot = battleSpawnRotation;
+            }
+            else
+            {
+                Debug.LogWarning("[PlayerSpawner] 배틀로얄 스폰 지점이 없어 PlayerSpawner 위치에서 부활합니다.");
+            }
         }
-        // 부활장소가 랜덤인 모드인지 확인
-        else if(spawnZones.Length > 0)
+        else
         {
-            int index = Random.Range(0, spawnZones.Length);
-            spawnPos = spawnZones[index].position;
-            spawnRot = spawnZones[index].rotation;
+            // 달리기 모드는 기존 체크포인트 부활 규칙을 그대로 유지합니다.
+            BaseGameManager gameManager = Object.FindFirstObjectByType<BaseGameManager>();
+            if (gameManager != null &&
+                gameManager.GetBestRespawnPoint(out Vector3 targetPos, out Quaternion targetRot))
+            {
+                spawnPos = targetPos;
+                spawnRot = targetRot;
+            }
+            else if (TryGetRandomSpawnZone(out Vector3 randomSpawnPosition, out Quaternion randomSpawnRotation))
+            {
+                spawnPos = randomSpawnPosition;
+                spawnRot = randomSpawnRotation;
+            }
         }
 
-        spawnPos.z += Random.Range(-offset, offset);
-        spawnPos.x += Random.Range(-offset, offset);
+        // 배틀로얄 부활 위치에도 랜덤 오프셋을 더하지 않고 안전한 스폰 지점을 그대로 사용합니다.
+        if (battleRoyalGameManager == null)
+        {
+            AddRandomSpawnOffset(ref spawnPos);
+        }
 
         player = PhotonNetwork.Instantiate(playerPrefabs[randomPrefabIndex].name, spawnPos, spawnRot);
-        
+
+        // 배틀로얄에서 부활한 캐릭터에게 설정된 시간만큼 무적을 적용합니다.
+        if (battleRoyalGameManager != null)
+        {
+            ApplyBattleRoyalSpawnProtection(player,battleRoyalGameManager.respawnInvincibleDuration);
+        }
+    }
+
+    // 인스펙터에 등록된 스폰 지점 중 하나의 위치와 회전을 무작위로 반환합니다.
+    private bool TryGetRandomSpawnZone(out Vector3 spawnPosition, out Quaternion spawnRotation)
+    {
+        spawnPosition = transform.position;
+        spawnRotation = transform.rotation;
+
+        if (spawnZones == null || spawnZones.Length == 0) return false;
+
+        int index = Random.Range(0, spawnZones.Length);
+        Transform spawnZone = spawnZones[index];
+        if (spawnZone == null) return false;
+
+        spawnPosition = spawnZone.position;
+        spawnRotation = spawnZone.rotation;
+        return true;
+    }
+
+    // 기존 모드에서 사용하던 스폰 위치 분산값을 한곳에서 적용합니다.
+    private void AddRandomSpawnOffset(ref Vector3 spawnPosition)
+    {
+        spawnPosition.z += Random.Range(-offset, offset);
+        spawnPosition.x += Random.Range(-offset, offset);
+    }
+
+    // 부활한 캐릭터에 런타임 무적 컴포넌트를 연결하여 프리팹 수정을 최소화합니다.
+    private void ApplyBattleRoyalSpawnProtection(GameObject spawnedPlayer, float duration)
+    {
+        if (spawnedPlayer == null) return;
+
+        BRController protection =
+            spawnedPlayer.GetComponent<BRController>();
+
+        if (protection == null)
+        {
+            protection = spawnedPlayer.AddComponent<BRController>();
+        }
+
+        protection.Activate(duration);
     }
 
     // 회전 방향을 직접 받아옴.

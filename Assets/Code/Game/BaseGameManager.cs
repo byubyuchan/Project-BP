@@ -11,7 +11,7 @@ using UnityEngine.UI;
 
 public abstract class BaseGameManager : MonoBehaviourPunCallbacks
 {
-    // 리스폰 값을 하드코딩으로 받지 않도록 만든 내부 클래스   
+    // 리스폰 값을 하드코딩으로 받지 않도록 만든 내부 클래스
     public static class PhotonKeys
     {
         // 게임 데이터 관련
@@ -51,7 +51,7 @@ public abstract class BaseGameManager : MonoBehaviourPunCallbacks
     public GameObject playerSlotPrefab;
 
     [Header("NextScene")]
-    [SerializeField]protected string nextScene;
+    [SerializeField] protected string nextScene;
 
     protected int maxPlayers;
     protected List<BasePlayerSlot> allSlots = new List<BasePlayerSlot>();
@@ -254,13 +254,21 @@ public abstract class BaseGameManager : MonoBehaviourPunCallbacks
         playerObj.transform.position = pos;
         playerObj.transform.rotation = rot;
 
+        // 순간이동 전 위치에서 누적된 중력과 넉백을 제거합니다.
+        Photon.Pun.UtilityScripts.MoveByKeys movement =
+            playerObj.GetComponent<Photon.Pun.UtilityScripts.MoveByKeys>();
+        if (movement != null) movement.ResetMotionAfterTeleport();
+
         if (cc != null) cc.enabled = true;
 
         playerObj.GetComponent<PhotonView>().RPC("RPC_SizeReset", RpcTarget.All);
+
+        // 변경된 위치와 크기를 다음 물리 프레임까지 기다리지 않고 즉시 반영합니다.
+        Physics.SyncTransforms();
     }
 
 
-    public virtual void LeaveRoom() 
+    public virtual void LeaveRoom()
     {
         PhotonNetwork.LeaveRoom();
     }
@@ -299,7 +307,7 @@ public abstract class BaseGameManager : MonoBehaviourPunCallbacks
             return true;
         }
 
-        // 차후, false는 배틀로얄 모드에서 사용하면 좋을듯!! 스폰 위치를 랜덤으로 지정해서 부활하도록?? 
+        // 차후, false는 배틀로얄 모드에서 사용하면 좋을듯!! 스폰 위치를 랜덤으로 지정해서 부활하도록??
 
         return false;
     }
@@ -312,7 +320,15 @@ public abstract class BaseGameManager : MonoBehaviourPunCallbacks
         playerObj.transform.position = pos;
         playerObj.transform.rotation = rot;
 
+        // 로컬 순간이동에서도 이전 위치의 중력과 넉백 상태를 제거합니다.
+        Photon.Pun.UtilityScripts.MoveByKeys movement =
+            playerObj.GetComponent<Photon.Pun.UtilityScripts.MoveByKeys>();
+        if (movement != null) movement.ResetMotionAfterTeleport();
+
         if (cc != null) cc.enabled = true;
+
+        // 로컬 순간이동 결과를 물리 엔진에 즉시 반영합니다.
+        Physics.SyncTransforms();
     }
 
     public bool RequestTeleport(GameObject playerObj)

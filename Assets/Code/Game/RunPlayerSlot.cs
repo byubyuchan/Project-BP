@@ -6,7 +6,7 @@ using UnityEngine.UI;
 public class RunPlayerSlot : BasePlayerSlot
 {
     [Header("Run UI Components")]
-    public TextMeshProUGUI scoreText; // 점수나 진행도 표시
+    public TextMeshProUGUI scoreText;
     public TextMeshProUGUI rankText;
 
     public override void SetEmpty()
@@ -22,7 +22,7 @@ public class RunPlayerSlot : BasePlayerSlot
         base.Setup(player);
         if (backgroundImage != null) backgroundImage.enabled = true;
 
-        // 자기 자신은 노란색, 다른 플레이어는 흰색으로 표시
+        // 자신의 정보는 노란색, 다른 플레이어의 정보는 흰색으로 표시합니다.
         Color textColor = player.IsLocal ? Color.yellow : Color.white;
 
         if (nameText != null) nameText.color = textColor;
@@ -36,7 +36,18 @@ public class RunPlayerSlot : BasePlayerSlot
     public void UpdateScore(int score)
     {
         if (IsEmpty) return;
-        scoreText.text = $"{score} / {RunGameManager.Instance.winScore}"; // 예: 달린 거리
+
+        // 같은 점수 UI를 달리기와 배틀로얄 모드에서 함께 사용할 수 있도록 승리 점수를 구분합니다.
+        int targetScore = gameManager switch
+        {
+            RunGameManager runGameManager => runGameManager.winScore,
+            BattleRoyalGameManager battleRoyalGameManager => battleRoyalGameManager.winScore,
+            _ => 0
+        };
+
+        scoreText.text = targetScore > 0
+            ? $"{score} / {targetScore}"
+            : score.ToString();
     }
 
     public void UpdateRank(int rank)

@@ -12,6 +12,8 @@ namespace Photon.Pun.UtilityScripts
         public float speed = 5f;            // 이동 속도 (기존 1000은 너무 컸으니 조정)
         public float jumpHeight = 2f;       // 점프 높이
         public float gravity = -20f;        // 중력 세기
+        // (추가) 낙하 속도가 지나치게 커져 바닥이나 순간이동 트리거를 통과하지 않도록 제한합니다.
+        [Min(0f)] public float maxFallSpeed = 100f;
         public float rotationSpeed = 0.1f;
 
         protected CharacterController controller;
@@ -156,6 +158,13 @@ namespace Photon.Pun.UtilityScripts
 
             if (originalSpeed > 0f) speed = originalSpeed;
             if (localSize != Vector3.zero) transform.localScale = localSize;
+        }
+
+        // (추가) 순간이동 후 이전 위치에서 누적된 중력과 넉백이 새 위치에 적용되지 않도록 초기화합니다.
+        public void ResetMotionAfterTeleport()
+        {
+            velocity = Vector3.zero;
+            impact = Vector3.zero;
         }
 
         private void ConfigureInputForCurrentOwner()
@@ -331,14 +340,21 @@ namespace Photon.Pun.UtilityScripts
 
             Vector3 finalMove = (moveDir * speed) + impact;
 
-            if (isGrounded && velocity.y <= 0)
+            // (변경) 접지 중에는 누적된 수직 속도를 제거하고 기존 바닥 부착값만 사용합니다.
+            if (isGrounded && velocity.y <= 0f)
             {
-                finalMove.y = -10f;
+                velocity.y = -100f;
+            }
+            else
+            {
+                // (변경) 공중에서만 중력을 누적하고 최대 낙하 속도를 제한합니다.
+                velocity.y = Mathf.Max(
+                    velocity.y + gravity * Time.deltaTime,
+                    -maxFallSpeed);
             }
 
-            controller.Move(finalMove * Time.deltaTime);
-            velocity.y += gravity * Time.deltaTime;
-            controller.Move(velocity * Time.deltaTime);
+            // (변경) 마지막 0 이동이 접지 결과를 덮어쓰지 않도록 수평 이동과 수직 이동을 한 번에 처리합니다.
+            controller.Move((finalMove + velocity) * Time.deltaTime);
         }
 
         protected virtual void HandleAttack()
@@ -382,12 +398,15 @@ namespace Photon.Pun.UtilityScripts
 
             bool wasGrounded = isGrounded;
 
-            // 2. 바닥 체크
+            // (변경) 새 유예 시간 계산을 제거하고 CharacterController의 기존 접지값을 직접 사용합니다.
             isGrounded = controller.isGrounded;
 
             if (!wasGrounded && isGrounded)
             {
-                photonView.RPC("RPC_PlayActionSound", RpcTarget.All, "Landing");
+                photonView.RPC(
+                    "RPC_PlayActionSound",
+                    RpcTarget.All,
+                    "Landing");
             }
 
             // 3. 회전 처리
@@ -597,7 +616,7 @@ namespace Photon.Pun.UtilityScripts
         }
 
         [PunRPC]
-        // 데미지 함수에 attackerId(타격자 번호) 매개변수 추가!
+        // (변경) 피해 처리 시 공격자의 Photon ActorNumber를 함께 받아 마지막 공격자를 기록합니다.
         public void RPC_TakeDamage(float damage, int attackerId)
         {
             if (isInvincible) return;
@@ -605,11 +624,11 @@ namespace Photon.Pun.UtilityScripts
             if (photonView.IsMine && damage > 0f)
             {
                 HPController hpController = GetComponent<HPController>();
-                if (hpController != null && hpController.Hp >= 0f) // 여기 > 0f 로 방어 처리 권장
+                if (hpController != null && hpController.Hp >= 0f) // (변경) 체력이 남아 있는 동안에만 피해를 처리합니다.
                 {
                     hpController.Hp -= damage;
 
-                    // 틱딜이나 낙사(-1)가 아니라면, 마지막 타격자를 수첩에 갱신!
+                    // (변경) 환경 피해가 아니라면 마지막 공격자를 갱신합니다.
                     if (attackerId != -1)
                     {
                         lastAttackerId = attackerId;
@@ -620,16 +639,20 @@ namespace Photon.Pun.UtilityScripts
                     {
                         hpController.Die();
 
-                        // 내가 죽었을 때 킬러가 존재하고, 그게 나 자신(자살)이 아니라면 점수 지급!
+                        // (변경) 자살이 아닌 경우 현재 게임 모드의 매니저에 1킬을 전달합니다.
                         if (lastAttackerId != -1 && lastAttackerId != photonView.OwnerActorNr)
                         {
-                            if (RunGameManager.Instance != null)
+                            if (BattleRoyalGameManager.Instance != null)
+                            {
+                                BattleRoyalGameManager.Instance.AddKillScore(lastAttackerId);
+                            }
+                            else if (RunGameManager.Instance != null)
                             {
                                 RunGameManager.Instance.AddKillScore(lastAttackerId);
                             }
                         }
 
-                        // 죽고 나면 수첩 초기화 (연속 킬 방지)
+                        // (변경) 같은 사망이 중복 집계되지 않도록 마지막 공격자를 초기화합니다.
                         lastAttackerId = -1;
                     }
                 }
@@ -705,18 +728,24 @@ namespace Photon.Pun.UtilityScripts
         public void RPC_SizeDown()
         {
             transform.localScale *= 0.5f;
+            // (추가) 변경된 캐릭터 크기를 물리 엔진에 즉시 반영합니다.
+            Physics.SyncTransforms();
         }
 
         [PunRPC]
         public void RPC_SizeUp()
         {
             transform.localScale *= 2f;
+            // (추가) 변경된 캐릭터 크기를 물리 엔진에 즉시 반영합니다.
+            Physics.SyncTransforms();
         }
 
         [PunRPC]
         public void RPC_SizeReset()
         {
             transform.localScale = localSize;
+            // (추가) 원래 크기로 복구된 콜라이더를 물리 엔진에 즉시 반영합니다.
+            Physics.SyncTransforms();
         }
 
         [PunRPC]

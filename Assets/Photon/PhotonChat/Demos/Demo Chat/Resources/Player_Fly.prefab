@@ -3727,6 +3727,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 1841c298173cdad4db8df8602c8f1c8d, type: 3}
       insertIndex: -1
       addedObject: {fileID: 3840749384665865867}
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 1841c298173cdad4db8df8602c8f1c8d, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: -7359546907868695702}
   m_SourcePrefab: {fileID: 100100000, guid: 1841c298173cdad4db8df8602c8f1c8d, type: 3}
 --- !u!4 &4873261628758574015 stripped
 Transform:
@@ -4089,6 +4092,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a4da0871a08894e4c8e06a1dbd0dc18a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::BuffSystem
+--- !u!114 &-7359546907868695702
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5254184595196352773}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6e3d7681ab2d3e541aa70b4a54956c65, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::BRController
 --- !u!1001 &7769695180881371302
 PrefabInstance:
   m_ObjectHideFlags: 0

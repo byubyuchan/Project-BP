@@ -110,13 +110,61 @@ public class RunGameManager : BaseGameManager
 
     public void ProcessLocalPlayerCheckpointTrigger(GameObject playerObj, Transform cpTransform)
     {
-        if (checkpoints.Count == 0) return;
+        TryProcessLocalPlayerCheckpoint(playerObj, cpTransform);
+    }
+
+    // 순간이동 전에 목적지가 현재 순서의 체크포인트인지 확인합니다.
+    public bool IsExpectedCheckpoint(Transform cpTransform)
+    {
+        if (cpTransform == null || checkpoints == null || checkpoints.Count == 0) return false;
+
+        int checkpointIndex = FindCheckpointIndex(cpTransform);
+        if (checkpointIndex < 0) return false;
+
+        Player player = PhotonNetwork.LocalPlayer;
+        int expectedIndex = player.CustomProperties.ContainsKey(PhotonKeys.GOAL)
+            ? (int)player.CustomProperties[PhotonKeys.GOAL]
+            : 0;
+
+        expectedIndex %= checkpoints.Count;
+        return checkpointIndex == expectedIndex;
+    }
+
+    // 콜라이더가 체크포인트의 자식이어도 등록된 체크포인트를 찾을 수 있도록 보정합니다.
+    private int FindCheckpointIndex(Transform cpTransform)
+    {
+        if (cpTransform == null || checkpoints == null) return -1;
+
+        for (int i = 0; i < checkpoints.Count; i++)
+        {
+            Transform checkpoint = checkpoints[i];
+            if (checkpoint == null) continue;
+
+            if (cpTransform == checkpoint ||
+                cpTransform.IsChildOf(checkpoint) ||
+                checkpoint.IsChildOf(cpTransform))
+            {
+                return i;
+            }
+        }
+
+        return -1;
+    }
+
+    // 체크포인트 진행도와 완주 점수를 실제로 갱신했는지 호출자가 확인할 수 있게 합니다.
+    private bool TryProcessLocalPlayerCheckpoint(GameObject playerObj, Transform cpTransform)
+    {
+        if (playerObj == null || cpTransform == null || checkpoints == null || checkpoints.Count == 0)
+        {
+            return false;
+        }
 
         Player player = PhotonNetwork.LocalPlayer;
         int expectedIndex = player.CustomProperties.ContainsKey(PhotonKeys.GOAL) ? (int)player.CustomProperties[PhotonKeys.GOAL] : 0;
-        if (expectedIndex >= checkpoints.Count) expectedIndex = 0;
+        expectedIndex %= checkpoints.Count;
+        int checkpointIndex = FindCheckpointIndex(cpTransform);
 
-        if (cpTransform == checkpoints[expectedIndex])
+        if (checkpointIndex == expectedIndex)
         {
             int currentProgress = player.CustomProperties.ContainsKey(PhotonKeys.PROGRESS) ? (int)player.CustomProperties[PhotonKeys.PROGRESS] : 0;
 
@@ -126,10 +174,12 @@ public class RunGameManager : BaseGameManager
             props.Add(PhotonKeys.PROGRESS, currentProgress + 1);
             props.Add(PhotonKeys.GOAL, nextGoalIndex);
 
-            props.Add(PhotonKeys.LAST_X, cpTransform.position.x);
-            props.Add(PhotonKeys.LAST_Y, cpTransform.position.y);
-            props.Add(PhotonKeys.LAST_Z, cpTransform.position.z);
-            props.Add(PhotonKeys.LAST_ROT_Y, cpTransform.eulerAngles.y);
+            // 자식 콜라이더가 아니라 체크포인트 목록에 등록된 기준 위치를 저장합니다.
+            Transform checkpoint = checkpoints[checkpointIndex];
+            props.Add(PhotonKeys.LAST_X, checkpoint.position.x);
+            props.Add(PhotonKeys.LAST_Y, checkpoint.position.y);
+            props.Add(PhotonKeys.LAST_Z, checkpoint.position.z);
+            props.Add(PhotonKeys.LAST_ROT_Y, checkpoint.eulerAngles.y);
 
             if (nextGoalIndex >= checkpoints.Count)
             {
@@ -141,30 +191,43 @@ public class RunGameManager : BaseGameManager
 
                 props["Score"] = currentScore + 50;
 
-                PhotonNetwork.LocalPlayer.SetCustomProperties(props);
-
                 nextGoalIndex = 0;
             }
-            else
+
+            // 네트워크 속성 전송에 실패하면 체크포인트를 끄거나 다음 구간으로 진행하지 않습니다.
+            if (!PhotonNetwork.LocalPlayer.SetCustomProperties(props))
             {
-                PhotonNetwork.LocalPlayer.SetCustomProperties(props);
+                Debug.LogWarning($"체크포인트 {checkpointIndex}의 진행도 저장 요청에 실패했습니다.");
+                return false;
             }
 
-            if (expectedIndex < goalObjects.Length) goalObjects[expectedIndex].SetActive(false);
-            if (expectedIndex < checkZones.Length) checkZones[expectedIndex].SetActive(false);
+            if (goalObjects != null && expectedIndex < goalObjects.Length && goalObjects[expectedIndex] != null)
+            {
+                goalObjects[expectedIndex].SetActive(false);
+            }
 
-            Debug.Log($"Player {player.NickName} passed checkpoint {expectedIndex}. Next goal: {nextGoalIndex}. Progress: {currentProgress + 1}");
+            if (checkZones != null && expectedIndex < checkZones.Length && checkZones[expectedIndex] != null)
+            {
+                checkZones[expectedIndex].SetActive(false);
+            }
+
+            // 일반 접촉과 순간이동 모두 다음 체크포인트 표시를 같은 시점에 활성화합니다.
+            ActivateCheckpointVisual(nextGoalIndex);
+
+            Debug.Log($"플레이어 {player.NickName} 체크포인트 {expectedIndex} 통과. 다음 체크포인트: {nextGoalIndex}, 진행도: {currentProgress + 1}");
+            return true;
         }
-        else
+
+        int previousIndex = expectedIndex - 1;
+        if (previousIndex < 0) previousIndex = checkpoints.Count - 1;
+
+        // 방금 통과한 체크포인트의 중복 트리거는 무시하고, 순서가 틀린 경우에만 복귀시킵니다.
+        if (checkpointIndex >= 0 && checkpointIndex != previousIndex)
         {
-            int previousIndex = expectedIndex - 1;
-            if (previousIndex < 0) previousIndex = checkpoints.Count - 1;
-
-            if (cpTransform != checkpoints[previousIndex])
-            {
-                RequestTeleport(playerObj);
-            }
+            RequestTeleport(playerObj);
         }
+
+        return false;
     }
     public void ActivateMyNextCheckpoint()
     {
@@ -177,24 +240,8 @@ public class RunGameManager : BaseGameManager
 
     public bool ProcessLocalPlayerPortalTransition(GameObject playerObj, Transform destinationCheckpoint)
     {
-        if (playerObj == null || destinationCheckpoint == null || checkpoints.Count == 0) return false;
-
-        Player player = PhotonNetwork.LocalPlayer;
-        int expectedIndex = player.CustomProperties.ContainsKey(PhotonKeys.GOAL)
-            ? (int)player.CustomProperties[PhotonKeys.GOAL]
-            : 0;
-
-        expectedIndex %= checkpoints.Count;
-
-        if (destinationCheckpoint != checkpoints[expectedIndex])
-        {
-            RequestTeleport(playerObj);
-            return false;
-        }
-
-        ProcessLocalPlayerCheckpointTrigger(playerObj, destinationCheckpoint);
-        ActivateCheckpointVisual((expectedIndex + 1) % checkpoints.Count);
-        return true;
+        // 포탈 도착도 실제 순간이동이 끝난 뒤 공통 체크포인트 판정으로 확정합니다.
+        return TryProcessLocalPlayerCheckpoint(playerObj, destinationCheckpoint);
     }
 
     private void ActivateCheckpointVisual(int expectedIndex)

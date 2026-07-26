@@ -2,11 +2,11 @@ using System.Collections.Generic;
 using UnityEngine;
 using Photon.Pun;
 
-// TPZone과는 다르게 랜덤한 위치로 텔레포트 시키는 코드
+// (변경) 여러 목적지 중 하나를 무작위로 선택해 플레이어를 순간이동시킵니다.
 public class RandomTPZone : MonoBehaviour
 {
     [Header("Destination Settings")]
-    // 텔레포트 시킬 목적지 리스트 (최소 3개 이상 권장)
+    // 순간이동 목적지 목록입니다.
     [SerializeField] private List<Transform> destinationPoints = new List<Transform>();
 
     [Header("Effect Settings")]
@@ -25,7 +25,7 @@ public class RandomTPZone : MonoBehaviour
             return;
         }
 
-        // 랜덤하게 한 곳 선택
+        // 등록된 목적지 중 한 곳을 무작위로 선택합니다.
         int randomIndex = Random.Range(0, destinationPoints.Count);
         Transform target = destinationPoints[randomIndex];
 
@@ -43,11 +43,19 @@ public class RandomTPZone : MonoBehaviour
         playerObj.transform.position = pos;
         playerObj.transform.rotation = rot;
 
+        // (추가) 순간이동 전 위치에서 누적된 중력과 넉백을 제거합니다.
+        Photon.Pun.UtilityScripts.MoveByKeys movement =
+            playerObj.GetComponent<Photon.Pun.UtilityScripts.MoveByKeys>();
+        if (movement != null) movement.ResetMotionAfterTeleport();
+
         if (cc != null) cc.enabled = true;
 
         playerObj.GetComponent<PhotonView>().RPC("RPC_SizeReset", RpcTarget.All);
 
-        // 사운드 매니저가 있다면 효과음 재생
+        // 변경된 위치와 크기를 물리 엔진에 즉시 반영합니다.
+        Physics.SyncTransforms();
+
+        // 사운드 매니저가 연결되어 있을 때만 순간이동 효과음을 재생합니다.
         if (AudioManager.instance != null && !string.IsNullOrEmpty(teleportSFX))
         {
             AudioManager.instance.PlaySFX(teleportSFX, pos);

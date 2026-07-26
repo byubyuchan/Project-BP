@@ -5708,6 +5708,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 1841c298173cdad4db8df8602c8f1c8d, type: 3}
       insertIndex: -1
       addedObject: {fileID: 763613140353953559}
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 1841c298173cdad4db8df8602c8f1c8d, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: -162003979591764193}
   m_SourcePrefab: {fileID: 100100000, guid: 1841c298173cdad4db8df8602c8f1c8d, type: 3}
 --- !u!4 &4873261628758574015 stripped
 Transform:
@@ -5787,6 +5790,7 @@ MonoBehaviour:
   speed: 40
   jumpHeight: 25
   gravity: -200
+  maxFallSpeed: 200
   rotationSpeed: 10
   cameraPivot: {fileID: 9077078744339165630}
   mouseSensitivity: 3
@@ -6067,3 +6071,15 @@ MonoBehaviour:
   - {fileID: 8987658113517069976}
   - {fileID: 3608404864021766823}
   - {fileID: 8288659324409603424}
+--- !u!114 &-162003979591764193
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5254184595196352773}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6e3d7681ab2d3e541aa70b4a54956c65, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::BRController

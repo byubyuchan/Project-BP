@@ -928,7 +928,10 @@ MonoBehaviour:
   m_MultiSelect: 0
   m_Options:
     m_Options:
-    - m_Text: Default
+    - m_Text: "\uB808\uC774\uC2F1 \uBAA8\uB4DC"
+      m_Image: {fileID: 0}
+      m_Color: {r: 1, g: 1, b: 1, a: 1}
+    - m_Text: "\uBC30\uD2C0\uB85C\uC584 \uBAA8\uB4DC"
       m_Image: {fileID: 0}
       m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_OnValueChanged:

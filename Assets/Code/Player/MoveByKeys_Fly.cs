@@ -6,7 +6,7 @@ namespace Photon.Pun.UtilityScripts
     public class MoveByKeys_Fly : MoveByKeys
     {
         [Header("Flight Specs")]
-        public float ascendSpeed = 10f;   // 상승/하강 속도
+        public float ascendSpeed = 10f;
 
         private float ascendInput;
 
@@ -34,20 +34,18 @@ namespace Photon.Pun.UtilityScripts
             Vector3 moveDir = (forwardMove * verticalInput) + (rightMove * horizontalInput);
             Vector3 finalMove = moveDir * speed;
 
-            // 스페이스바 누르면 수직 상승
             finalMove.y += ascendInput * ascendSpeed;
 
-            // 중력(velocity.y) 연산을 아예 빼버리고 순수 비행 벡터로 냅다 밀어버림!
             controller.Move(finalMove * Time.deltaTime);
 
-            if(!isGrounded)
+            if (!isGrounded)
             {
                 bool isMovingOrAscending = (Mathf.Abs(horizontalInput) > 0.1f || Mathf.Abs(verticalInput) > 0.1f || ascendInput > 0.1f);
 
                 if (isMovingOrAscending)
                 {
                     windSoundTimer += Time.deltaTime;
-                    if (windSoundTimer >= 0.5f) // 1초 쿨타임 계산
+                    if (windSoundTimer >= 0.5f)
                     {
                         windSoundTimer = 0f;
 

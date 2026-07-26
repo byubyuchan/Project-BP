@@ -18,7 +18,10 @@ public class RoomSlot : MonoBehaviour
         if (info.CustomProperties.ContainsKey("mode"))
             modeText.text = (string)info.CustomProperties["mode"];
         else
-            modeText.text = "Default";
+        {
+            // 모드 속성이 없는 기존 방은 기본값인 레이싱 모드로 표시
+            modeText.text = "레이싱 모드";
+        }
 
         playerText.text = $"{info.PlayerCount} / {info.MaxPlayers}";
 
